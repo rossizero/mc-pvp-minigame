@@ -3,7 +3,6 @@ package de.peacepunkt.mcpvpminigame.rounds;
 import de.peacepunkt.mcpvpminigame.Main;
 import de.peacepunkt.mcpvpminigame.teams.Team;
 import org.bukkit.entity.Player;
-import sun.tools.jstat.RawOutputFormatter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +15,7 @@ public class RoundHandler {
     public RoundHandler(Main main) {
         round = new Round();
         this.main = main;
+        
     }
 
     public void startRound() {
