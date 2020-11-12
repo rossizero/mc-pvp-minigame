@@ -2,7 +2,10 @@ package de.peacepunkt.mcpvpminigame.rounds;
 
 import de.peacepunkt.mcpvpminigame.Main;
 import de.peacepunkt.mcpvpminigame.teams.Team;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -15,14 +18,21 @@ public class RoundHandler {
 
     public RoundHandler(Main main) {
         teams = new ArrayList<Team>();
-        round = new Round();
+        round = new Round(this);
+        main.getServer().getPluginManager().registerEvents(round, main);
         this.main = main;
     }
 
     public void startRound() {
-        // get all people from lobby that are in teams
-        // give round instance it the people and their teams
-        // and say  and round.start oder so
+        round.start();
+    }
+
+    public List<Player> getPlayers() {
+        List<Player> players = new ArrayList<Player>();
+        for(Team t : teams) {
+            players.addAll(t.getPlayers());
+        }
+        return players;
     }
 
     public Team createTeam(String name, String short_name, Player leader, int color) {
@@ -63,5 +73,28 @@ public class RoundHandler {
             }
         }
         return true;
+    }
+
+    public Main getMain() {
+        return main;
+    }
+    public Round getRound() {
+        return round;
+    }
+
+    public void tpPlayerIntoGame(Player p) {
+        World world = Bukkit.getWorld("world");
+        p.teleport(new Location(world, world.getSpawnLocation().getX(), world.getSpawnLocation().getY(), world.getSpawnLocation().getZ()));
+    }
+
+    public void stopRound() {
+        round.stop();
+        for(Player player: Bukkit.getOnlinePlayers()) {
+            main.clearInventory(player);
+        }
+
+        teams = new ArrayList<Team>();
+        round = new Round(this);
+
     }
 }

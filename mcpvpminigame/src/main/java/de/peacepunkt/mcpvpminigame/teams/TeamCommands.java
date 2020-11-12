@@ -38,7 +38,7 @@ public class TeamCommands {
                                         return true;
                                     } else {
                                         sender.sendMessage(Main.serverChatColor + "Invitation successfully send to  " + targetName);
-                                        target.sendMessage(Main.serverChatColor + sender.getDisplayName() + " wants to invite you to his team. If this is  also what you want type /accept otherwise just ignore me...");
+                                        target.sendMessage(Main.serverChatColor + sender.getDisplayName() + Main.serverChatColor + " wants to invite you to his team. If this is  also what you want type /accept otherwise just ignore me...");
                                         pendingInviteRequests.put(sender, target);
                                         return true;
                                     }
@@ -74,6 +74,9 @@ public class TeamCommands {
                                 target.sendMessage(Main.serverChatColor + "accepted invitation by " + p.getDisplayName());
                                 Team in = main.getHandler().getTeamOfLeader(p);
                                 in.addPlayer(target, false);
+                                if(main.getHandler().getRound().isRunning()) {
+                                    main.getHandler().tpPlayerIntoGame(target);
+                                }
                                 p.sendMessage(Main.serverChatColor + target.getDisplayName() + " is now in your team!");
 
                             } else {
