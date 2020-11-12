@@ -45,12 +45,46 @@ public class OpCommands {
             }
         });
 
-        //TODO make team <name> <leader: Player> <color?>
+        //TODO make team <name> <short_name> <leader: Player> <color?>
         main.getCommand("maketeam").setExecutor(new CommandExecutor() {
             @Override
             public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
-
+                if(strings.length == 4) {
+                    try {
+                        String name = strings[0];
+                        String short_name = strings[1];
+                        String player_name = strings[2];
+                        Player leader = Bukkit.getPlayer(player_name);
+                        if (leader == null)
+                            return false;
+                        int color = Integer.parseInt(strings[3]);
+                        main.getHandler().createTeam(name, short_name, leader, color);
+                        leader.addAttachment(main, "leader", true);
+                    } catch (Exception e){
+                        return false;
+                    }
+                }
                 return true;
+            }
+        });
+
+        //TODO delete team <leader_name>
+        main.getCommand("deleteTeam").setExecutor(new CommandExecutor() {
+            @Override
+            public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
+                if(strings.length == 1) {
+                    try {
+                        String player_name = strings[2];
+                        Player leader = Bukkit.getPlayer(player_name);
+                        if (leader == null)
+                            return false;
+                        int color = Integer.parseInt(strings[3]);
+                        leader.removeAttachment(main.permissions.get(leader.getUniqueId()));
+                    } catch (Exception e){
+                        return false;
+                    }
+                }
+                return false;
             }
         });
     }

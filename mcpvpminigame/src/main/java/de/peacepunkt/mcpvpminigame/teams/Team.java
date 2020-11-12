@@ -7,25 +7,65 @@ import org.bukkit.entity.Player;
 import java.util.List;
 
 public class Team {
-    Player leader;
+    OfflinePlayer leader;
     List<OfflinePlayer> mates;
     String name;
+    String short_name;
     ChatColor color;
 
-    public void Team(String name, Player leader, ChatColor color) {
+    public Team(String name, String short_name, Player leader, ChatColor color) {
         this.name = name;
         this.color = color;
         this.leader = leader;
+        this.short_name = short_name;
+        changeNickName(leader);
+    }
+    public Team(String name, String short_name, Player leader, int color) {
+        this.name = name;
+        this.color = Team.colorById(color);
+        this.leader = leader;
+        this.short_name = short_name;
+        changeNickName(leader);
+    }
+
+    private void changeNickName(Player player) {
+        player.setDisplayName(color+player.getName());
     }
 
     public void addPlayer(OfflinePlayer player) {
-
+        if(player.getPlayer() != null)
+            player.getPlayer().setDisplayName(color+player.getName());
+        mates.add(player);
     }
 
+    public static ChatColor colorById(int id) {
+        switch (id) {
+            default:
+                return ChatColor.BLUE;
+            case 1:
+                return ChatColor.GREEN;
+            case 2:
+                return ChatColor.YELLOW;
+            case 3:
+                return ChatColor.RED;
+            case 4:
+                return ChatColor.LIGHT_PURPLE;
+            case 5:
+                return ChatColor.BLACK;
+            case 6:
+                return ChatColor.GRAY;
+            case 7:
+                return ChatColor.GOLD;
+            case 8:
+                return ChatColor.DARK_RED;
+            case 9:
+                return ChatColor.AQUA;
+        }
+    }
 
     //returns whether player is in this team or not
     public boolean containsPlayer(Player player) {
-        if (player.equals(leader)) {
+        if (player.equals(leader.getPlayer())) {
             return true;
         }
 
@@ -35,5 +75,17 @@ public class Team {
             }
         }
         return false;
+    }
+
+    public ChatColor getColor() {
+        return color;
+    }
+
+    public String getDescription() {
+        return color + name;
+    }
+
+    public OfflinePlayer getLeader() {
+        return leader;
     }
 }

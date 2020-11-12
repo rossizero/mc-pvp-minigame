@@ -2,6 +2,7 @@ package de.peacepunkt.mcpvpminigame.rounds;
 
 import de.peacepunkt.mcpvpminigame.Main;
 import de.peacepunkt.mcpvpminigame.teams.Team;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -23,7 +24,11 @@ public class RoundHandler {
         // give round instance it the people and their teams
         // and say  and round.start oder so
     }
-
+    public Team createTeam(String name, String short_name, Player leader, int color) {
+        Team t = new Team(name, short_name, leader, color);
+        teams.add(t);
+        return t;
+    }
     public Team getTeamOfPlayer(Player player) {
         for(Team t : teams) {
             if (t.containsPlayer(player)) {
@@ -31,5 +36,25 @@ public class RoundHandler {
             }
         }
         return null;
+    }
+
+    // returns the team of player if player is this teams leader
+    // null for every other case
+    public Team getTeamOfLeader(Player player) {
+        for(Team t : teams) {
+            if (t.getLeader().getPlayer().equals(player)) {
+                return t;
+            }
+        }
+        return null;
+    }
+
+    public boolean isColorFree(ChatColor color) {
+        for(Team t : teams) {
+            if(color.equals(t.getColor())) {
+                return false;
+            }
+        }
+        return true;
     }
 }
