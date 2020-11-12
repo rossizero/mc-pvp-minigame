@@ -19,16 +19,23 @@ public class RoundHandler {
 
     public RoundHandler(Main main) {
         teams = new ArrayList<Team>();
-        round = new Round();
+        round = new Round(this);
+        main.getServer().getPluginManager().registerEvents(round, main);
         this.main = main;
-        
     }
 
     public void startRound() {
-        // get all people from lobby that are in teams
-        // give round instance it the people and their teams
-        // and say  and round.start oder so
+        round.start();
     }
+
+    public List<Player> getPlayers() {
+        List<Player> players = new ArrayList<Player>();
+        for(Team t : teams) {
+            players.addAll(t.getPlayers());
+        }
+        return players;
+    }
+
     public Team createTeam(String name, String short_name, Player leader, int color) {
         Team t = new Team(name, short_name, leader, color);
         teams.add(t);
@@ -55,7 +62,7 @@ public class RoundHandler {
     // null for every other case
     public Team getTeamOfLeader(Player player) {
         for(Team t : teams) {
-            if (t.getLeader().getPlayer().equals(player)) {
+            if (t.getLeader().getUniqueId().equals(player.getUniqueId())) {
                 return t;
             }
         }
@@ -69,5 +76,28 @@ public class RoundHandler {
             }
         }
         return true;
+    }
+
+    public Main getMain() {
+        return main;
+    }
+    public Round getRound() {
+        return round;
+    }
+
+    public void tpPlayerIntoGame(Player p) {
+        World world = Bukkit.getWorld("world");
+        p.teleport(new Location(world, world.getSpawnLocation().getX(), world.getSpawnLocation().getY(), world.getSpawnLocation().getZ()));
+    }
+
+    public void stopRound() {
+        round.stop();
+        for(Player player: Bukkit.getOnlinePlayers()) {
+            main.clearInventory(player);
+        }
+
+        teams = new ArrayList<Team>();
+        round = new Round(this);
+
     }
 }
