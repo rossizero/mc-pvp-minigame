@@ -10,5 +10,21 @@
      description: warp to another world (must be loaded though)
      usage: /warp <worldname>
      permission: op
+     permission-message: Nope.. 
+   start:
+     description: warp to another world (must be loaded though)
+     usage: /warp <worldname>
+     permission: op
      permission-message: Nope..
-
+  
+   maketeam:
+     description: warp to another world (must be loaded though)
+     usage: /warp <worldname>
+     permission: op
+     permission-message: Nope..  
+   position:
+     description: warp to another world (must be loaded though)
+     usage: /warp <worldname>
+     permission: op
+     permission-message: Nope..
+  
