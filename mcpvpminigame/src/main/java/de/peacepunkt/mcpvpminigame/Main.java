@@ -20,7 +20,7 @@ import java.util.UUID;
 
 public class Main extends JavaPlugin implements Listener {
         public static ChatColor serverChatColor = ChatColor.GREEN;
-        public static int nopvp = 20; //5 * 60; //secs
+        public static int nopvp = 5 * 60; //secs
 
         World lobby;
         RoundHandler handler;
@@ -52,10 +52,6 @@ public class Main extends JavaPlugin implements Listener {
 
         @EventHandler
         public void onPlayerJoin(PlayerJoinEvent event) {
-                //tp to lobby
-                Location l = new Location(lobby, lobby.getSpawnLocation().getX(), lobby.getSpawnLocation().getY(), lobby.getSpawnLocation().getZ());
-                event.getPlayer().teleport(l);
-
                 //check if player had a team and if he was the leader of that team
                 Team t = handler.getTeamOfPlayer(event.getPlayer());
                 boolean isLeader = permissions.containsKey(event.getPlayer().getUniqueId());
@@ -64,12 +60,22 @@ public class Main extends JavaPlugin implements Listener {
                                 addLeaderPermission(event.getPlayer());
                         }
                         t.addPlayer(Bukkit.getOfflinePlayer(event.getPlayer().getUniqueId()), isLeader);
+                        if(event.getPlayer().getWorld().getName().equals("lobby")) {
+                                handler.tpPlayerIntoGame(event.getPlayer());
+                        }
                 } else {
+                        //tp to lobby
+                        clearInventory(event.getPlayer());
+                        Location l = new Location(lobby, lobby.getSpawnLocation().getX(), lobby.getSpawnLocation().getY(), lobby.getSpawnLocation().getZ());
+                        event.getPlayer().teleport(l);
                         event.getPlayer().sendMessage(serverChatColor + "You're in no team yet. Wait for a team leader to invite you or ask an admin to create a team for you.");
                 }
         }
 
-
+        public void clearInventory(Player player) {
+                player.getInventory().clear();
+                player.getEnderChest().clear();
+        }
         public RoundHandler getHandler() {
                 return handler;
         }
@@ -83,7 +89,6 @@ public class Main extends JavaPlugin implements Listener {
                         permissions.put(id, a);
                 }
         }
-
 
         //loads or creates the lobby world
         private World checkLobby() {

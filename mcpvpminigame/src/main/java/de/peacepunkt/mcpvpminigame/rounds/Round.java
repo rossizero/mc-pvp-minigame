@@ -22,7 +22,7 @@ public class Round implements Listener {
     }
 
     public void start() {
-        tpPlayersIntoWorld();
+        tpPlayersIntoWorld("world");
         startSound();
         running = true;
         noPvpCooldown = new BukkitRunnable() {
@@ -53,8 +53,8 @@ public class Round implements Listener {
         }
     }
 
-    private void tpPlayersIntoWorld() {
-        World world = Bukkit.getWorld("world");
+    private void tpPlayersIntoWorld(String worldname) {
+        World world = Bukkit.getWorld(worldname);
         for(Player p: handler.getPlayers()) {
             p.teleport(new Location(world, world.getSpawnLocation().getX(), world.getSpawnLocation().getY(), world.getSpawnLocation().getZ()));
         }
@@ -70,5 +70,9 @@ public class Round implements Listener {
 
     public boolean isRunning() {
         return running;
+    }
+
+    public void stop() {
+        tpPlayersIntoWorld("lobby");
     }
 }

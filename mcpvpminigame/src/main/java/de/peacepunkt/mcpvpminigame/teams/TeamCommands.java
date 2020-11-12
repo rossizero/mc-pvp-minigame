@@ -74,6 +74,9 @@ public class TeamCommands {
                                 target.sendMessage(Main.serverChatColor + "accepted invitation by " + p.getDisplayName());
                                 Team in = main.getHandler().getTeamOfLeader(p);
                                 in.addPlayer(target, false);
+                                if(main.getHandler().getRound().isRunning()) {
+                                    main.getHandler().tpPlayerIntoGame(target);
+                                }
                                 p.sendMessage(Main.serverChatColor + target.getDisplayName() + " is now in your team!");
 
                             } else {

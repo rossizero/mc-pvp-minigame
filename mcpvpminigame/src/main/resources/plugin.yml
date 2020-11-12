@@ -17,7 +17,13 @@
      usage: /start
      permission: op
      permission-message: Nope..
-  
+
+   stop:
+     description: stop a round
+     usage: /stop
+     permission: op
+     permission-message: Nope..
+
    maketeam:
      description: create a team
      usage: /maketeam <name> <short_name> <leader name> <int>
