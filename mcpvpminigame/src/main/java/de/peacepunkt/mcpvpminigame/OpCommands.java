@@ -44,5 +44,14 @@ public class OpCommands {
                 return true;
             }
         });
+
+        //TODO make team <name> <leader: Player> <color?>
+        main.getCommand("maketeam").setExecutor(new CommandExecutor() {
+            @Override
+            public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
+
+                return true;
+            }
+        });
     }
 }
