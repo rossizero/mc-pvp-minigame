@@ -1,5 +1,7 @@
 package de.peacepunkt.mcpvpminigame;
 
+import de.peacepunkt.mcpvpminigame.postiontracker.PositionCommands;
+import de.peacepunkt.mcpvpminigame.rounds.RoundHandler;
 import org.bukkit.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -9,15 +11,24 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class Main extends JavaPlugin implements Listener {
         World lobby;
+        RoundHandler handler;
 
         @Override
         public void onEnable() {
-            lobby = checkLobby();
-            System.out.println(lobby);
-            getServer().getPluginManager().registerEvents(this, this);
-            new OpCommands(this);
+                lobby = checkLobby();
+                System.out.println(lobby);
+
+                getServer().getPluginManager().registerEvents(this, this);
+                handler = new RoundHandler(this);
+
+                //register  all command helper classes
+                new OpCommands(this);
+                new PositionCommands(this);
         }
 
+        public RoundHandler getHandler() {
+                return handler;
+        }
         @Override
         public void onDisable() {
 

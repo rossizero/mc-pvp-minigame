@@ -36,5 +36,13 @@ public class OpCommands {
                 return false;
             }
         });
+
+        main.getCommand("start").setExecutor(new CommandExecutor() {
+            @Override
+            public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
+                main.getHandler().startRound();
+                return true;
+            }
+        });
     }
 }
