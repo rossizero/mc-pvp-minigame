@@ -1,4 +1,12 @@
 package de.peacepunkt.mcpvpminigame.postiontracker;
 
-public class EndPortalTracker {
+import org.bukkit.event.Listener;
+
+public class EndPortalTracker implements Listener {
+    public EndPortalTracker() {
+
+    }
+
+
+    //TODO onPlayerEndEnteredEvent oder so
 }
