@@ -47,3 +47,6 @@
 
    deny:
      description: deny an invitaion to a team
+
+   a:
+     description: write in global chat

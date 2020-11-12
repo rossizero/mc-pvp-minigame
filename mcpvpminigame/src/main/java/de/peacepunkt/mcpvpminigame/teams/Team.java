@@ -112,4 +112,15 @@ public class Team {
             resetNickName(leader.getPlayer());
         }
     }
+
+    //sends a message to all team members
+    public void sendMessage(Player player, String message) {
+        for(OfflinePlayer p : mates) {
+            if(p.getPlayer() != null)
+                p.getPlayer().sendMessage(ChatColor.LIGHT_PURPLE+"[TEAM] " + ChatColor.RESET +"<"+player.getDisplayName() +"> " + message);
+        }
+        if(leader.getPlayer() != null) {
+            leader.getPlayer().sendMessage(ChatColor.LIGHT_PURPLE+"[TEAM] " + ChatColor.RESET +"<"+player.getDisplayName() +"> " + message);
+        }
+    }
 }
