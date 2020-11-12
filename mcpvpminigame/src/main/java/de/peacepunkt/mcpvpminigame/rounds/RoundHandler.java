@@ -17,7 +17,6 @@ public class RoundHandler {
         teams = new ArrayList<Team>();
         round = new Round();
         this.main = main;
-        
     }
 
     public void startRound() {
@@ -25,11 +24,18 @@ public class RoundHandler {
         // give round instance it the people and their teams
         // and say  and round.start oder so
     }
+
     public Team createTeam(String name, String short_name, Player leader, int color) {
         Team t = new Team(name, short_name, leader, color);
         teams.add(t);
         return t;
     }
+
+    public void removeTeam(Team t) {
+        t.clear();
+        teams.remove(t);
+    }
+
     public Team getTeamOfPlayer(Player player) {
         for(Team t : teams) {
             if (t.containsPlayer(player)) {
@@ -43,7 +49,7 @@ public class RoundHandler {
     // null for every other case
     public Team getTeamOfLeader(Player player) {
         for(Team t : teams) {
-            if (t.getLeader().getPlayer().equals(player)) {
+            if (t.getLeader().getUniqueId().equals(player.getUniqueId())) {
                 return t;
             }
         }
