@@ -9,4 +9,5 @@ public class EndPortalTracker implements Listener {
 
 
     //TODO onPlayerEndEnteredEvent oder so
+    //TODO onPlayerEndLeaveEvent oder so
 }
