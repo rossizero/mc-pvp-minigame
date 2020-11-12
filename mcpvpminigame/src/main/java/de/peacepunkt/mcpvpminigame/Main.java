@@ -1,9 +1,15 @@
 package de.peacepunkt.mcpvpminigame;
 
-import de.peacepunkt.mcpvpminigame.postiontracker.PositionCommands;
-import de.peacepunkt.mcpvpminigame.rounds.RoundHandler;
-import de.peacepunkt.mcpvpminigame.teams.Team;
-import org.bukkit.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.GameRule;
+import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.WorldCreator;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -11,9 +17,10 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import de.peacepunkt.mcpvpminigame.postiontracker.PositionCommands;
+import de.peacepunkt.mcpvpminigame.postiontracker.PositionTracker;
+import de.peacepunkt.mcpvpminigame.rounds.RoundHandler;
+import de.peacepunkt.mcpvpminigame.teams.Team;
 
 
 public class Main extends JavaPlugin implements Listener {
@@ -34,6 +41,9 @@ public class Main extends JavaPlugin implements Listener {
                 //register all command helper classes here
                 new OpCommands(this);
                 new PositionCommands(this);
+
+                (new PositionTracker(this, 2)).start(); // 1 min lag
+                
         }
 
         public RoundHandler getHandler() {
