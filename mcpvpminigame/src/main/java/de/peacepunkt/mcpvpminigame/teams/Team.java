@@ -1,16 +1,15 @@
 package de.peacepunkt.mcpvpminigame.teams;
 
-import de.peacepunkt.mcpvpminigame.Main;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Team {
     OfflinePlayer leader;
-    List<OfflinePlayer> mates;
+    List<Player> mates = new ArrayList<Player>();
     String name;
     String short_name;
     ChatColor color;
@@ -53,6 +52,18 @@ public class Team {
     public List<Player> getPlayers() {
         List<Player> online = new ArrayList<Player>();
         for(OfflinePlayer p : mates) {
+            if(p.isOnline()) {
+                online.add(p.getPlayer());
+            }
+        }
+        if(leader.isOnline()) {
+            online.add(leader.getPlayer());
+        }
+        return online;
+    }
+    public List<Player> getPlayers() {
+        List<Player> online = new ArrayList<Player>();
+        for(Player p : mates) {
             if(p.isOnline()) {
                 online.add(p.getPlayer());
             }

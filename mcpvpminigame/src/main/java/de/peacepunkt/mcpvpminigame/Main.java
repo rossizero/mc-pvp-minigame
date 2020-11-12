@@ -13,9 +13,10 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import de.peacepunkt.mcpvpminigame.postiontracker.PositionCommands;
+import de.peacepunkt.mcpvpminigame.postiontracker.PositionTracker;
+import de.peacepunkt.mcpvpminigame.rounds.RoundHandler;
+import de.peacepunkt.mcpvpminigame.teams.Team;
 
 
 public class Main extends JavaPlugin implements Listener {
@@ -42,7 +43,9 @@ public class Main extends JavaPlugin implements Listener {
                 //register all command helper classes here
                 new OpCommands(this);
                 new PositionCommands(this);
-                new TeamCommands(this);
+
+                (new PositionTracker(this, 2)).start(); // 1 min lag
+                
         }
 
         @Override
