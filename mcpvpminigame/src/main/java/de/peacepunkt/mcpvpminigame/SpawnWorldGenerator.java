@@ -35,15 +35,4 @@ public class SpawnWorldGenerator extends ChunkGenerator {
     	}
     	return chunk;
     }
-    
-    /*private class BlankPopulator extends BlockPopulator {
-		@Override
-		public void populate(World arg0, Random arg1, Chunk source) {
-			if(source.getX() == 0 && source.getZ() == 0) {
-				source.getBlock(0, 150, 0).setType(Material.BEDROCK);
-			}
-			
-		}
-	}*/
-
 }

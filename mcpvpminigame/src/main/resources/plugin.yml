@@ -13,14 +13,14 @@
      permission-message: Nope..
 
    start:
-     description: warp to another world (must be loaded though)
-     usage: /warp <worldname>
+     description: start a round
+     usage: /start
      permission: op
      permission-message: Nope..
   
    maketeam:
-     description: warp to another world (must be loaded though)
-     usage: /warp <worldname>
+     description: create a team
+     usage: /maketeam <name> <short_name> <leader name> <int>
      permission: op
      permission-message: Nope..
 
@@ -29,6 +29,21 @@
      usage: /warp <worldname>
      permission: op
      permission-message: Nope..
+
    deleteTeam:
+     description: deletes team of a leader
+     usage: /deleteTeam <leader name>
+     permission: op
+     permission-message: Nope..
+
    invite:
+     description: invite players to your team
+     usage: /invite <player name>
      permission: leader
+     permission-message: You do not lead a team
+
+   accept:
+     description: accept an invitation to a team
+
+   deny:
+     description: deny an invitaion to a team

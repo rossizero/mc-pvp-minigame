@@ -12,62 +12,99 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class TeamCommands {
-    Map<Player, Player> pendingInviteRequests;
+    private Map<Player, Player> pendingInviteRequests;
+
     public TeamCommands(Main main) {
         pendingInviteRequests = new HashMap<>();
+
         main.getCommand("invite").setExecutor(new CommandExecutor() {
             @Override
             public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
                 if (commandSender instanceof Player) {
-                    if (strings.length == 1) {
-                        Player sender = (Player) commandSender;
-                        String other = strings[0];
-                        Player target = Bukkit.getPlayer(other);
-                        //stuff
+                    Player sender = (Player) commandSender;
+                    Team t = main.getHandler().getTeamOfLeader(sender);
+                    if (t == null) {
+                        sender.sendMessage(Main.serverChatColor + "You can't do that");
+                    } else {
+                        if (strings.length == 1) {
+                            String targetName = strings[0];
+                            Player target = Bukkit.getPlayer(targetName);
+
+                            if (target != null) {
+                                if (!target.equals(sender)) {
+                                    if (pendingInviteRequests.containsValue(target)) {
+                                        sender.sendMessage(Main.serverChatColor + "This player has already been invited by someone else. Tell him to deny the invite and accept yours!.");
+                                        target.sendMessage(Main.serverChatColor + target.getDisplayName() + " also wants to recruit you. Type /deny");
+                                        return true;
+                                    } else {
+                                        sender.sendMessage(Main.serverChatColor + "Invitation successfully send to  " + targetName);
+                                        target.sendMessage(Main.serverChatColor + sender.getDisplayName() + " wants to invite you to his team. If this is  also what you want type /accept otherwise just ignore me...");
+                                        pendingInviteRequests.put(sender, target);
+                                        return true;
+                                    }
+                                } else {
+                                    sender.sendMessage(Main.serverChatColor + "I am not mad at you, I am just disappointed...");
+                                    return true;
+                                }
+                            } else {
+                                sender.sendMessage(Main.serverChatColor + "This could be a typo or your recruit is offline");
+                                return true;
+                            }
+
+                        } else {
+                            return false;
+                        }
                     }
+                    return false;
+                }
+                return false;
+            }
+        });
+
+        main.getCommand("accept").setExecutor(new CommandExecutor() {
+            @Override
+            public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
+                if(commandSender instanceof Player) {
+                    Player target = (Player) commandSender;
+                    for(Player p : pendingInviteRequests.keySet()) {
+                        if(pendingInviteRequests.get(p).equals(target)) {
+                            Team t = main.getHandler().getTeamOfPlayer(target);
+                            if(t == null) {
+                                pendingInviteRequests.remove(p);
+                                target.sendMessage(Main.serverChatColor + "accepted invitation by " + p.getDisplayName());
+                                Team in = main.getHandler().getTeamOfLeader(p);
+                                in.addPlayer(target, false);
+                                p.sendMessage(Main.serverChatColor + target.getDisplayName() + " is now in your team!");
+
+                            } else {
+                                target.sendMessage(Main.serverChatColor + "What the * are you doing? You already chose a team!");
+                            }
+                        }
+                        return true;
+                    }
+                    target.sendMessage(Main.serverChatColor + "There was no pending invitation for you...");
+                }
+                return false;
+            }
+        });
+
+        main.getCommand("deny").setExecutor(new CommandExecutor() {
+            @Override
+            public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
+                if(commandSender instanceof Player) {
+                    Player target = (Player) commandSender;
+                    for(Player p : pendingInviteRequests.keySet()) {
+                        if(pendingInviteRequests.get(p).equals(target)) {
+                            pendingInviteRequests.remove(p);
+                            target.sendMessage(Main.serverChatColor + "denied recruitment...");
+                            p.sendMessage(Main.serverChatColor + target.getDisplayName() +" denied your recruitment. Shame on you!");
+                            return true;
+                        }
+                    }
+                    target.sendMessage(Main.serverChatColor + "There was no pending invitation for you...");
                 }
                 return true;
             }
         });
-
-        /*main.getCommand("invite").setExecutor(new CommandExecutor() {
-            @Override
-            public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
-                if (commandSender instanceof Player) {
-                    Player sender = (Player) commandSender;
-                    /*main.getHandler().
-                    if (strings.length == 1) {
-                        String targetName = strings[0];
-                        Player target = Bukkit.getPlayer(targetName);
-
-                        if (target != null) {
-                            if(!target.equals(sender)) {
-                                if (pendingInviteRequests.containsValue(target)) {
-                                    sender.sendMessage(ChatColor.GREEN + "This player has already been requested by someone else. Tell him to deny the recruitment request and accept yours!.");
-                                    target.sendMessage(ChatColor.GREEN + target.getName() + " also wants to recruit you. Type /denyrecruitment");
-                                    return true;
-                                } else {
-                                    sender.sendMessage(ChatColor.GREEN + "I'll just let " + targetName + " validate this request real quick...");
-                                    target.sendMessage(ChatColor.GREEN + sender.getName() + " claims to have recruited you. If this is true type /acceptrecruitment otherwise just ignore me...");
-                                    pendingInviteRequests.put(sender, target);
-                                    return true;
-                                }
-                            } else {
-                                sender.sendMessage(ChatColor.GREEN + "I am not mad at you, I am just disappointed...");
-                                return true;
-                            }
-                        } else {
-                            sender.sendMessage(ChatColor.GREEN +"Your recruit has to be on this server. Just tell them to get online real quick!");
-                            return true;
-                        }
-
-                    } else {
-                        return false;
-                    }
-                }
-                return false;
-            }
-        });*/
-
     }
 }
