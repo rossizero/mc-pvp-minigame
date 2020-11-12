@@ -4,3 +4,11 @@
  author: Rossi
  description: pvp minigame
  api-version: 1.16
+
+ commands:
+   warp:
+     description: warp to another world (must be loaded though)
+     usage: /warp <worldname>
+     permission: op
+     permission-message: Nope..
+
