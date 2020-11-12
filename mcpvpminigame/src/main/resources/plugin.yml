@@ -10,7 +10,8 @@
      description: warp to another world (must be loaded though)
      usage: /warp <worldname>
      permission: op
-     permission-message: Nope.. 
+     permission-message: Nope..
+
    start:
      description: warp to another world (must be loaded though)
      usage: /warp <worldname>
@@ -21,10 +22,13 @@
      description: warp to another world (must be loaded though)
      usage: /warp <worldname>
      permission: op
-     permission-message: Nope..  
+     permission-message: Nope..
+
    position:
      description: warp to another world (must be loaded though)
      usage: /warp <worldname>
      permission: op
      permission-message: Nope..
-  
+   deleteTeam:
+   invite:
+     permission: leader

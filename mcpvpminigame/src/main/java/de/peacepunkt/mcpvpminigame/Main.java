@@ -11,6 +11,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -25,6 +26,7 @@ public class Main extends JavaPlugin implements Listener {
         public void onEnable() {
                 lobby = checkLobby();
                 System.out.println(lobby);
+                permissions = new HashMap<>();
 
                 getServer().getPluginManager().registerEvents(this, this);
                 handler = new RoundHandler(this);

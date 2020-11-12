@@ -14,6 +14,7 @@ public class RoundHandler {
     private List<Team> teams;
 
     public RoundHandler(Main main) {
+        teams = new ArrayList<Team>();
         round = new Round();
         this.main = main;
         
