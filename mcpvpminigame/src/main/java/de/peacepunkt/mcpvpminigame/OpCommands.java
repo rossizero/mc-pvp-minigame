@@ -58,8 +58,10 @@ class OpCommands {
                 if(main.getHandler().getRound().isRunning()) {
                     main.getHandler().stopRound();
                 } else {
-                    Player p = (Player) commandSender;
-                    p.sendMessage(Main.serverChatColor + "Nothing running....");
+                    if(commandSender instanceof  Player) {
+                        Player p = (Player) commandSender;
+                        p.sendMessage(Main.serverChatColor + "Nothing running....");
+                    }
                 }
                 return true;
             }

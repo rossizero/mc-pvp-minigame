@@ -13,10 +13,9 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import de.peacepunkt.mcpvpminigame.postiontracker.PositionCommands;
-import de.peacepunkt.mcpvpminigame.postiontracker.PositionTracker;
-import de.peacepunkt.mcpvpminigame.rounds.RoundHandler;
-import de.peacepunkt.mcpvpminigame.teams.Team;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 
 public class Main extends JavaPlugin implements Listener {
@@ -41,10 +40,10 @@ public class Main extends JavaPlugin implements Listener {
                 handler = new RoundHandler(this);
 
                 //register all command helper classes here
+                new TeamCommands(this);
                 new OpCommands(this);
                 new PositionCommands(this);
 
-                (new PositionTracker(this, 2)).start(); // 1 min lag
                 
         }
 
@@ -63,7 +62,7 @@ public class Main extends JavaPlugin implements Listener {
                                 addLeaderPermission(event.getPlayer());
                         }
                         t.addPlayer(Bukkit.getOfflinePlayer(event.getPlayer().getUniqueId()), isLeader);
-                        if(event.getPlayer().getWorld().getName().equals("lobby")) {
+                        if(event.getPlayer().getWorld().getName().equals("lobby") && handler.getRound().isRunning()) {
                                 handler.tpPlayerIntoGame(event.getPlayer());
                         }
                 } else {
