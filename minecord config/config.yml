@@ -1,0 +1,372 @@
+# Information: Please pay attention to the instructions of each section.
+
+# General settings of the plugin.
+Options:
+  # WARNING: To modify this field you must stop the server before.
+  # The list of labels for the main command, being the first the main label and the rest aliases.
+  MainCommandLabels:
+    - "minecord"
+    - "md"
+  # The list of worlds in which the voice chat will be disabled.
+  DisabledWorlds: []
+  # WARNING: To modify this field you must stop the server before.
+  # If 'WorldGuard' plugin is loaded and enabled, the list of regions in which the voice chat will be disabled.
+  DisabledRegions: []
+  # Whether or not the plugin will change the Discord nickname of linked players.
+  SetNick: true
+  # If the previous setting is enabled, whether or not to display the Minecraft name of linked players with the
+  # Discord name and between parenthesis or only the Minecraft name, without parenthesis. If enabled, and the resultant
+  # string's length is over 32 characters, this option will be applied as 'false'.
+  NickBetweenParenthesis: true
+  # The radius in which a group of players has to be to start voice chatting.
+  Radius: 50
+  # The Y radius in which a group of players has to be to start voice chatting. (Set to -1 to disable and use
+  # the default 'Radius' value for Y coordinate as well).
+  YRadius: 20
+  # WARNING: To modify this field you must stop the server before.
+  # Whether or not players must press a key (X by default) to talk. This key must be configured by each player
+  # in their Discord settings.
+  PressKeyToTalk: true
+  # Whether or not to delete all channels with a name starting with the reserved keyword for Minecord to voice channels,
+  # on server start. Disabling this in standalone servers may cause issues. (Useful for networks).
+  DeleteIllegalChannelsOnConnect: true
+  # Whether or not to pause the main thread of server on server stop so that every member is moved to the waiting
+  # channel before stopping. (Useful for networks).
+  WaitToMoveOnDisconnect: false
+  # Whether or not to try to automatically toggle on voice chat status of players who join the server, or join/move to
+  # the waiting channel (might be any other voice channel, except for the moving trigger, if 'ForceWaiting' option is
+  # disabled), if the standard voice chat requirements are met.
+  AutoToggle: true
+  # Whether or not to force players to wait in the waiting channel until they get moved to a voice chat channel. If
+  # disabled, players may be in other channels different from the waiting channel until they get moved to a voice chat
+  # channel. (Useful for networks with option 'ForceVoiceChat' enabled).
+  ForceWaiting: true
+  # WARNING: To modify this field you must stop the server before.
+  # Whether or not a scoreboard will appear showing the information of the voice chat for each player. Disable this
+  # setting if you are using any other scoreboard-depending plugin.
+  UseScoreboard: true
+  # If the previous setting is enabled, whether or not to remove the scoreboard when a player is not chatting.
+  RemoveScoreboardOnDisconnect: false
+  # If the 'UseScoreboard' setting is enabled, whether or not display a prefix in player nametags as explained below.
+  ApplyTags: true
+  # Whether or not disable the voice chat of a player who is muted.
+  DisableVoiceChatIfMuted: false
+  # Whether or not disable the voice chat of a player who is deafened.
+  DisableVoiceChatIfDeafened: false
+  # WARNING: To modify this field you must stop the server before.
+  # Whether or not force every player to link their account with Discord and enter the Waiting Channel so that they
+  # can join the server.
+  ForceVoiceChat: true
+  # WARNING: To modify this field you must stop the server before.
+  # The delay, in seconds, between messages sent to unlinked players in loop to remind them to link their accounts. (Set
+  # to -1 to disable it).
+  RemindLinkDelay: -1
+  # Whether or not ignore that two players are in the same radius if one of them cannot see the other.
+  IgnoreIfVanish: true
+  # WARNING: To modify this field you must stop the server before.
+  # If 'DiscordSRV' plugin is loaded and enabled, whether or not link automatically Discord and Minecraft accounts of
+  # players through Minecord, when players link theirs through 'DiscordSRV'.
+  AutomaticLink: false
+  # The list of commands that will be dispatched when a player gets linked. (Use the following syntax:
+  # "%TYPE%:%COMMAND%", being %TYPE% whether 'CONSOLE', 'OP' or 'PLAYER' and the command without the slash (/),
+  # placeholder %PLAYER% is supported here).
+  CommandsOnLink: []
+  # The list of commands that will be dispatched when a player gets unlinked. (Use the following syntax:
+  # "%TYPE%:%COMMAND%", being %TYPE% whether 'CONSOLE', 'OP' or 'PLAYER' and the command without the slash (/),
+  # placeholder %PLAYER% is supported here).
+  CommandsOnUnlink: []
+
+# Database settings of the plugin.
+Database:
+  # WARNING: To modify this field you must stop the server before.
+  # Whether or not enable the database system. This is required to run it in a BungeeCord Network.
+  Enabled: false
+  # WARNING: To modify this field you must stop the server before.
+  # If this section is enabled, the name of the database to connect to. (This field has to be filled if this section
+  # is enabled).
+  Name: ""
+  # WARNING: To modify this field you must stop the server before.
+  # If this section is enabled, the name of the hostname of the server to connect to. (This field has to be filled if
+  # this section is enabled).
+  Host: ""
+  # WARNING: To modify this field you must stop the server before.
+  # If this section is enabled, the port of the server to connect to.
+  Port: 3306
+  # WARNING: To modify this field you must stop the server before.
+  # If this section is enabled, the username of the database to connect to. (This field has to be filled if this
+  # section is enabled).
+  Username: ""
+  # WARNING: To modify this field you must stop the server before.
+  # If this section is enabled, the password of the database to connect to. (This field has to be filled if this
+  # section is enabled).
+  Password: ""
+
+# Discord settings of the plugin.
+Discord:
+  # The token ID of the Discord bot. (This field has to be filled to enable the plugin: read the installation
+  # instructions).
+  Token: "Nzc2MTcyNjI3NTg0NjE0NDAx.X6xBFw.CwFVVx46DZpW9K6SxPUggE0YxXw"
+  # The guild ID of the Discord server in which the Discord bot will operate. (This field has to be filled to
+  # enable the plugin: read the installation instructions).
+  Server: "776064975256682497"
+  # The channel ID of the Discord guild waiting channel. (This field has to be filled to enable the plugin:
+  # read the installation instructions).
+  WaitingChannel: "776173884583313499"
+  # The list of roles IDs which will be able to see all the voice channels but not connect.
+  BypassRoles: []
+  # The list of roles IDs which will be granted the permission of priority speaker in all the voice chat channels.
+  PrioritySpeaker: []
+  # The category in which voice chat channels will be created. (You may set it to "null" to generate them on top of
+  # the server).
+  VoiceChatChannelsCategory: "null"
+  # The ID of the role that will be given when a member gets linked. (You may set it to "null" to disable this
+  # setting).
+  RoleOnLink: "null"
+  # If the previous setting is enabled, whether or not to remove the role given when the member gets unlinked.
+  RemoveRoleOnUnlink: true
+
+# If the 'UseScoreboard' setting in the 'Options' section is enabled, scoreboards and its settings, used by the plugin,
+# any value here which will be displayed on the scoreboard (noted above) cannot have more than 16 characters
+# (including color codes), otherwise it will not be displayed properly. The maximum entries of scoreboard a client can
+# render are 15.
+Scoreboards:
+  # (String displayed in the scoreboard). The title of the scoreboard.
+  Title: "&d&lMinecord"
+  # If the 'RemoveScoreboardOnDisconnect' setting in the 'Options' section is disabled, settings of the scoreboard
+  # displayed when a player has the voice chat disconnected.
+  Disconnected:
+    # (String displayed in the scoreboard). (List of string displayed each one below the one before). Information
+    # displayed after the title and a space.
+    Info:
+      - "&cVoice chat"
+      - "&cdisconnected."
+  # Settings of the scoreboard displayed when a player is not chatting but has the voice chat enabled.
+  Nobody:
+    # (String displayed in the scoreboard). (List of string displayed each one below the one before). Information
+    # displayed after the title and a space.
+    Info:
+      - "&cNobody can"
+      - "&chear you."
+  # Settings of the scoreboard displayed when a player is chatting.
+  Chatting:
+    # (String displayed in the scoreboard). (List of string displayed each one below the one before). Information
+    # displayed after the title and a space.
+    Info:
+      - "&bThese players"
+      - "&bcan hear you:"
+    # (String displayed in the scoreboard). (List of string displayed each one below the one before). Information
+    # displayed after the "info" and a space if nobody can hear the player. This will be only displayed if the
+    # 'RemoveScoreboardOnDisconnect' setting in the 'Options' section is disabled.
+    Empty:
+      - "&cNobody is"
+      - "&chearing you."
+    # (String displayed in the scoreboard). The color code set to someone who can hear the player and is in their
+    # radius.
+    InRangePlayerColor: "&d"
+    # (String displayed in the scoreboard). The color code set to someone who is not in the player's radius but this
+    # player can hear the other player due to Discord limitations.
+    OutOfRangePlayerColor: "&d&o"
+    # (String displayed in the player tags). If the 'ApplyTags' setting in the 'Options' section is enabled, the prefix
+    # set to someone in their tag who can hear the player and is in their radius.
+    InRangePlayerTag: "&a&l⬤ &r&f"
+    # (String displayed in the player tags). If the 'ApplyTags' setting in the 'Options' section is enabled, the prefix
+    # set to someone in their tag who is not in the player's radius but this player can hear the other player due to
+    # Discord limitations.
+    OutOfRangePlayerTag: "&6&l⬤ &r&f"
+    # The maximum number of players who can be displayed on the scoreboard.
+    MaxPlayers: 8
+    # (String displayed in the scoreboard). When the previous limit has reached the indicator of that the limit of
+    # players displayed has been reached.
+    MaxReachedIndicator: "&7..."
+
+# Placeholders implemented by the plugin that may be used by a plugin implementing PlaceholderAPI or
+# MvdwPlaceholderAPI, the placeholder that uses each replace will be noted above each field. (You may change to "null"
+# any sound to not replace that placeholder at any time, moreover, use '&' and a color code to add colors to the
+# replaces). Field names are self-explanatory.
+Placeholders:
+  # Placeholder replacing the following values: %MINECORD_LINK_STATE% (PlaceholderAPI) or {MINECORD_LINK_STATE}
+  # (MvdwPlaceholderAPI).
+  LinkState:
+    Unlinked: "&cUnlinked"
+  # Placeholder replacing the following values: %MINECORD_VOICECHAT_STATE% (PlaceholderAPI) or
+  # {MINECORD_VOICECHAT_STATE} (MvdwPlaceholderAPI).
+  VoiceChatState:
+    Unlinked: "&cUnlinked"
+    Disconnected: "&cDisconnected"
+    Nobody: "&cNobody is hearing you"
+    Chatting: "&aChatting"
+  # Placeholder replacing the following values: %MINECORD_MUTE_STATE% (PlaceholderAPI) or {MINECORD_MUTE_STATE}
+  # (MvdwPlaceholderAPI).
+  MuteState:
+    Muted: "&cMuted"
+    Unmuted: "&aUnmuted"
+  # Placeholder replacing the following values: %MINECORD_CHATTERS% (PlaceholderAPI) or {MINECORD_CHATTERS}
+  # (MvdwPlaceholderAPI).
+  Chatters:
+    Header: "&bPlayers hearing you:&7 "
+    Splitter: "&b,&7 "
+
+# Sounds used by the plugin, all sounds must be a legal type of sounds according to your server version. The following
+# default sounds are for latest Minecraft version available, change them if you are using other Minecraft version. (You
+# may change to "null" any sound to not play that sound at any time). Field names are self-explanatory.
+Sounds:
+  VoiceChatConnect: "ENTITY_CHICKEN_EGG"
+  VoiceChatDisconnect: "ENTITY_CHICKEN_EGG"
+  TtsReceived: "ENTITY_EXPERIENCE_ORB_PICKUP"
+
+# Messages used by the plugin, the placeholders supported by each message will be noted above of each field. (You may
+# change to "null" any message to not send that message at any time; use '&' and a color code to add colors to the
+# messages). Field names are self-explanatory.
+Messages:
+  # No placeholders supported.
+  Prefix: "&d[&bMinecord&d]"
+  # Placeholders supported: %PREFIX% (displays the configured prefix), %GOOD_SYNTAX% (displays the correct usage of
+  # the command).
+  BadSyntax: "%PREFIX% &cIncorrect command. Use instead &d%GOOD_SYNTAX%&b."
+  # Placeholders supported: %PREFIX% (displays the configured prefix).
+  NotEnoughPermissions: "%PREFIX% &cYou do not have enough permissions to perform that command."
+  # Placeholders supported: %PREFIX% (displays the configured prefix).
+  InvalidTarget: "%PREFIX% &cThe player name you entered is invalid or not connected."
+  # Placeholders supported: %PREFIX% (displays the configured prefix).
+  UnknownSubcommand: "%PREFIX% &cUnknown subcommand. Use &d/minecord help &cto obtain a list of available subcommands."
+  # No placeholders supported.
+  CommandSyntaxOnlyPlayer: "This command syntax is exclusive for in-game players."
+  # No placeholders supported.
+  CommandOnlyPlayer: "This command is exclusive for in-game players."
+  # (List of messages sent simultaneously and in order). Placeholders supported: %PREFIX% (displays the configured
+  # prefix).
+  Help:
+    - "%PREFIX% &bHelp:"
+    - ""
+    - "&b> &d/minecord help &b- Displays this commands information."
+    - "&b> &d/minecord reload &b- Reloads the config file."
+    - "&b> &d/minecord link &b- Links your Minecraft account with your Discord account."
+    - "&b> &d/minecord unlink (player) &b- Unlinks your (or a linked player's) Minecraft account with their Discord
+    account."
+    - "&b> &d/minecord toggle (player) &b- Toggles your (or a linked player's) voice chat state."
+    - "&b> &d/minecord board &b- Toggles your scoreboard."
+    - "&b> &d/minecord mute <player> &b- Prevents a player from using the voice chat."
+    - "&b> &d/minecord unmute <player> &b- Allows a player to use the voice chat again."
+    - "&b> &d/minecord tts <player> <message> &b- Send a text-to-speech message to a linked player."
+    - "&b> &d/minecord atts <player> <message> &b- Send an anonymous text-to-speech message to a linked player."
+    - ""
+    - "&bYou may use &d/md &binstead of &d/minecord&b. The arguments between &d<> &bare compulsory, while the ones
+      between &d() &bare optional."
+  # Placeholders supported: %PREFIX% (displays the configured prefix).
+  ReloadedSuccessfully: "%PREFIX% &bYou successfully reloaded the config file."
+  # Placeholders supported: %PREFIX% (displays the configured prefix).
+  PreLinkErrorAlready: "%PREFIX% &cYour account is already linked."
+  # Placeholders supported: %PREFIX% (displays the configured prefix).
+  PreLinkErrorPending: "%PREFIX% &cYou are already linking your account."
+  # Placeholders supported: %PREFIX% (displays the configured prefix).
+  PreLinkTimeout: "%PREFIX% &cYour linking code has expired, please create a new one."
+  # Placeholders supported: %PREFIX% (displays the configured prefix), %CODE% (displays the generated linking code).
+  PreLinkedSuccessfully: "%PREFIX% &bYou successfully generated a linking code, please send a direct message to the
+  Minecord Discord bot with the following code within two minutes: &d%CODE%&b."
+  # Placeholders supported: %PREFIX% (displays the configured prefix).
+  LinkedSuccessfully: "%PREFIX% &bYou successfully linked your account with Discord. You may now use &d/minecord
+  toggle &bto start chatting!"
+  # Placeholders supported: %PREFIX% (displays the configured prefix).
+  LinkedAutomatically: "%PREFIX% &bYou automatically linked your account with Discord. You may now use &d/minecord
+  toggle &bto start chatting!"
+  # Placeholders supported: %PREFIX% (displays the configured prefix).
+  UnlinkPlayerErrorBypass: "%PREFIX% &cYou cannot unlink that player's account."
+  # Placeholders supported: %PREFIX% (displays the configured prefix).
+  UnlinkPlayerErrorAlready: "%PREFIX% &cThat player's account is not linked."
+  # Placeholders supported: %PREFIX% (displays the configured prefix), %PLAYER% (displays the target player name).
+  UnlinkedPlayerSuccessfully: "%PREFIX% &bYou successfully unlinked &d%PLAYER%&b's account."
+  # Placeholders supported: %PREFIX% (displays the configured prefix).
+  UnlinkErrorAlready: "%PREFIX% &cYour account is not linked."
+  # Placeholders supported: %PREFIX% (displays the configured prefix).
+  UnlinkedSuccessfully: "%PREFIX% &cYour account has been unlinked."
+  # Placeholders supported: %PREFIX% (displays the configured prefix).
+  TogglePlayerErrorBypass: "%PREFIX% &cYou cannot toggle that player's voice state."
+  # Placeholders supported: %PREFIX% (displays the configured prefix).
+  TogglePlayerErrorMuted: "%PREFIX% &cThat player is muted."
+  # Placeholders supported: %PREFIX% (displays the configured prefix).
+  TogglePlayerErrorUnlink: "%PREFIX% &cThat player's account is unlinked."
+  # Placeholders supported: %PREFIX% (displays the configured prefix).
+  TogglePlayerErrorNoWaiting: "%PREFIX% &cTo enable that voice chat the player must be waiting in the waiting
+  channel."
+  # Placeholders supported: %PREFIX% (displays the configured prefix), %PLAYER% (displays the target player name).
+  ToggledPlayerEnabledSuccessfully: "%PREFIX% &bYou successfully &denabled %PLAYER%&b's voice chat."
+  # Placeholders supported: %PREFIX% (displays the configured prefix), %PLAYER% (displays the target player name).
+  ToggledPlayerDisabledSuccessfully: "%PREFIX% &bYou successfully &ddisabled %PLAYER%&b's voice chat."
+  # Placeholders supported: %PREFIX% (displays the configured prefix).
+  ToggleErrorMuted: "%PREFIX% &cYou cannot toggle your voice chat because you are muted."
+  # Placeholders supported: %PREFIX% (displays the configured prefix).
+  ToggleErrorUnlink: "%PREFIX% &cPlease, to toggle your voice chat, link first your account using &d/minecord
+  link&c."
+  # Placeholders supported: %PREFIX% (displays the configured prefix).
+  ToggleErrorNoWaiting: "%PREFIX% &cTo enable your voice chat you must be waiting in the waiting channel."
+  # Placeholders supported: %PREFIX% (displays the configured prefix).
+  ToggledEnabledSuccessfully: "%PREFIX% &bYour voice chat has been &denabled&b."
+  # Placeholders supported: %PREFIX% (displays the configured prefix).
+  ToggledDisabledSuccessfully: "%PREFIX% &bYour voice chat has been &ddisabled&b."
+  # Placeholders supported: %PREFIX% (displays the configured prefix).
+  ScoreboardErrorUnlinked: "%PREFIX% &cYou cannot toggle your scoreboard because you are unlinked."
+  # Placeholders supported: %PREFIX% (displays the configured prefix).
+  ScoreboardDisabledSuccessfully: "%PREFIX% &bYour scoreboard has been &ddisabled&b."
+  # Placeholders supported: %PREFIX% (displays the configured prefix).
+  ScoreboardEnabledSuccessfully: "%PREFIX% &bYour scoreboard has been &denabled&b."
+  # Placeholders supported: %PREFIX% (displays the configured prefix).
+  MutePlayerErrorBypass: "%PREFIX% &cYou cannot mute that player."
+  # Placeholders supported: %PREFIX% (displays the configured prefix).
+  MutePlayerErrorAlready: "%PREFIX% &cThat player is already muted."
+  # Placeholders supported: %PREFIX% (displays the configured prefix).
+  MutedPlayerSuccessfully: "%PREFIX% &bYou successfully muted &d%PLAYER%&b."
+  # Placeholders supported: %PREFIX% (displays the configured prefix).
+  MutedSuccessfully: "%PREFIX% &cYou have been muted."
+  # Placeholders supported: %PREFIX% (displays the configured prefix).
+  UnmutePlayerErrorAlready: "%PREFIX% &cThat player is not muted."
+  # Placeholders supported: %PREFIX% (displays the configured prefix), %PLAYER% (displays the target player name).
+  UnmutedPlayerSuccessfully: "%PREFIX% &bYou successfully unmuted &d%PLAYER%&b."
+  # Placeholders supported: %PREFIX% (displays the configured prefix).
+  UnmutedSuccessfully: "%PREFIX% &bYou have been unmuted."
+  # Placeholders supported: %PREFIX% (displays the configured prefix).
+  TtsPlayerErrorBypass: "%PREFIX% &cYou cannot send a tts message to that player."
+  # Placeholders supported: %PREFIX% (displays the configured prefix).
+  TtsPlayerErrorUnlink: "%PREFIX% &cThat player's account is unlinked."
+  # Placeholders supported: %PREFIX% (displays the configured prefix).
+  TtsPlayerErrorChars: "%PREFIX% &cThe message may not exceed of 2000 characters."
+  # Placeholders supported: %PREFIX% (displays the configured prefix).
+  TtsPlayerErrorImpossible: "%PREFIX% &cIt was not possible to send the tts message to that player. (Maybe the player
+  has blocked the Discord bot)."
+  # Placeholders supported: %PREFIX% (displays the configured prefix), %PLAYER% (displays the target player name).
+  TtsPlayerSuccessfully: "%PREFIX% &bYou successfully sent the tts message to &d%PLAYER%&b."
+  # (If the 'ForceVoiceChat' setting in the 'Options' section is enabled). Placeholders supported: %PREFIX% (displays
+  # the configured prefix).
+  ForceVoiceChatPlayerErrorCommandDisabled: "%PREFIX% &cThat command has been disabled for that player."
+  # (If the 'ForceVoiceChat' setting in the 'Options' section is enabled). Placeholders supported: %PREFIX% (displays
+  # the configured prefix).
+  ForceVoiceChatErrorCommandDisabled: "%PREFIX% &cThat command has been disabled."
+  # (If the 'ForceVoiceChat' setting in the 'Options' section is enabled). Placeholders supported: %PREFIX% (displays
+  # the configured prefix).
+  ForceVoiceChatKickedForceUnlinked: "%PREFIX% &cYou have been kicked because your Minecraft account has been unlinked
+  with your Discord account. Please try to reconnect."
+  # (If the 'ForceVoiceChat' setting in the 'Options' section is enabled). Placeholders supported: %PREFIX% (displays
+  # the configured prefix).
+  ForceVoiceChatKickedForceToggled: "%PREFIX% &cYou have been kicked because your voice chat has been disabled."
+  # (If the 'ForceVoiceChat' setting in the 'Options' section is enabled). Placeholders supported: %PREFIX% (displays
+  # the configured prefix).
+  ForceVoiceChatKickedNotWaiting: "%PREFIX% &cYou have been kicked because you are not waiting in the Waiting
+  Channel."
+  # (If the 'ForceVoiceChat' setting in the 'Options' section is enabled). Placeholders supported: %PREFIX% (displays
+  # the configured prefix).
+  ForceVoiceChatKickedBotDisconnected: "%PREFIX% &cYou have been kicked because the Discord bot is disconnected."
+  # (If the 'ForceVoiceChat' setting in the 'Options' section is enabled). Placeholders supported: %PREFIX% (displays
+  # the configured prefix), %CODE% (displays the generated linking code).
+  ForceVoiceChatKickedUnlinked: "%PREFIX% &cYou have been kicked because your Minecraft account is not linked with
+  your Discord account. To link your accounts, please send a direct message to the Minecord Discord bot within two
+  minutes with the following code: &d%CODE%&c."
+  # (If the 'RemindLink' setting in the 'Options' section is enabled). Placeholders supported: %PREFIX% (displays the
+  # configured prefix).
+  RemindLink: "%PREFIX% &dRemember! &bYou can link your Minecraft account with Discord using &d/md link&b!"
+  # No placeholders supported.
+  DiscordLinkErrorInvalidCode: "The linking code you entered is invalid."
+  # No placeholders supported.
+  DiscordLinkedOffline: "You are not connected to the server, once you join it you will get linked automatically."
+  # No placeholders supported.
+  DiscordLinkedSuccessfully: "You successfully linked your Minecraft account with Discord."
+  # (This message will be sent before the TTS message) Placeholders supported: %PLAYER% (displays the sender's name).
+  DiscordTtsMessage: "Text-to-speech message from %PLAYER%:"
