@@ -106,5 +106,20 @@ public class TeamCommands {
                 return true;
             }
         });
+
+        main.getCommand("a").setExecutor(new CommandExecutor() {
+            @Override
+            public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
+                if(commandSender instanceof Player) {
+                    Player sender = (Player) commandSender;
+                    StringBuilder msg = new StringBuilder();
+                    for(String str : strings) {
+                        msg.append(str).append(" ");
+                    }
+                    Bukkit.broadcastMessage(ChatColor.LIGHT_PURPLE+"[GLOBAL] " + ChatColor.RESET +"<"+sender.getDisplayName() +"> " + msg.toString());
+                }
+                return true;
+            }
+        });
     }
 }

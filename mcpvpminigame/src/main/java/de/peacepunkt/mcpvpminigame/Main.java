@@ -8,6 +8,7 @@ import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -111,5 +112,15 @@ public class Main extends JavaPlugin implements Listener {
 
                 }
                 return ret;
+        }
+
+        @EventHandler
+        public void onAsyncPlayerChatEvent(AsyncPlayerChatEvent event){
+                //if player has a team, automatically send the message to team members only
+                Team t = handler.getTeamOfPlayer(event.getPlayer());
+                if (t != null) {
+                        t.sendMessage(event.getPlayer(), event.getMessage());
+                        event.setCancelled(true);
+                }
         }
 }
