@@ -15,7 +15,8 @@ public class RoundHandler {
 
     public RoundHandler(Main main) {
         teams = new ArrayList<Team>();
-        round = new Round();
+        round = new Round(this);
+        main.getServer().getPluginManager().registerEvents(round, main);
         this.main = main;
     }
 
@@ -23,6 +24,15 @@ public class RoundHandler {
         // get all people from lobby that are in teams
         // give round instance it the people and their teams
         // and say  and round.start oder so
+        round.start();
+    }
+
+    public List<Player> getPlayers() {
+        List<Player> players = new ArrayList<Player>();
+        for(Team t : teams) {
+            players.addAll(t.getPlayers());
+        }
+        return players;
     }
 
     public Team createTeam(String name, String short_name, Player leader, int color) {
@@ -63,5 +73,12 @@ public class RoundHandler {
             }
         }
         return true;
+    }
+
+    public Main getMain() {
+        return main;
+    }
+    public Round getRound() {
+        return round;
     }
 }

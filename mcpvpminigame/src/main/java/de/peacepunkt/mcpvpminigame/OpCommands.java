@@ -43,7 +43,12 @@ class OpCommands {
         main.getCommand("start").setExecutor(new CommandExecutor() {
             @Override
             public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
-                main.getHandler().startRound();
+                if(!main.getHandler().getRound().isRunning()) {
+                    main.getHandler().startRound();
+                } else {
+                    Player p = (Player) commandSender;
+                    p.sendMessage(Main.serverChatColor + "Already running....");
+                }
                 return true;
             }
         });

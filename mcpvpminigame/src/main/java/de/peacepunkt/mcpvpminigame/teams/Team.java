@@ -50,6 +50,19 @@ public class Team {
             mates.add(player);
     }
 
+    public List<Player> getPlayers() {
+        List<Player> online = new ArrayList<Player>();
+        for(OfflinePlayer p : mates) {
+            if(p.isOnline()) {
+                online.add(p.getPlayer());
+            }
+        }
+        if(leader.isOnline()) {
+            online.add(leader.getPlayer());
+        }
+        return online;
+    }
+
     public static ChatColor colorById(int id) {
         switch (id) {
             default:

@@ -20,6 +20,8 @@ import java.util.UUID;
 
 public class Main extends JavaPlugin implements Listener {
         public static ChatColor serverChatColor = ChatColor.GREEN;
+        public static int nopvp = 20; //5 * 60; //secs
+
         World lobby;
         RoundHandler handler;
         Map<UUID, PermissionAttachment> permissions;

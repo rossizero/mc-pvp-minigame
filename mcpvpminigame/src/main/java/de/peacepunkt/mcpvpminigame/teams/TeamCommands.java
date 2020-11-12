@@ -38,7 +38,7 @@ public class TeamCommands {
                                         return true;
                                     } else {
                                         sender.sendMessage(Main.serverChatColor + "Invitation successfully send to  " + targetName);
-                                        target.sendMessage(Main.serverChatColor + sender.getDisplayName() + " wants to invite you to his team. If this is  also what you want type /accept otherwise just ignore me...");
+                                        target.sendMessage(Main.serverChatColor + sender.getDisplayName() + Main.serverChatColor + " wants to invite you to his team. If this is  also what you want type /accept otherwise just ignore me...");
                                         pendingInviteRequests.put(sender, target);
                                         return true;
                                     }
