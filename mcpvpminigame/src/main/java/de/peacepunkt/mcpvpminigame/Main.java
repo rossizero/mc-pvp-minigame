@@ -1,117 +1,146 @@
 package de.peacepunkt.mcpvpminigame;
 
+import de.peacepunkt.mcpvpminigame.postiontracker.PositionCommands;
+import de.peacepunkt.mcpvpminigame.rounds.RoundHandler;
+import de.peacepunkt.mcpvpminigame.teams.Team;
+import de.peacepunkt.mcpvpminigame.teams.TeamCommands;
+import org.bukkit.*;
+import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.permissions.PermissionAttachment;
+import org.bukkit.plugin.java.JavaPlugin;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.GameRule;
-import org.bukkit.Location;
-import org.bukkit.World;
-import org.bukkit.WorldCreator;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.permissions.PermissionAttachment;
-import org.bukkit.plugin.java.JavaPlugin;
-
-import de.peacepunkt.mcpvpminigame.postiontracker.PositionCommands;
-import de.peacepunkt.mcpvpminigame.postiontracker.PositionTracker;
-import de.peacepunkt.mcpvpminigame.rounds.RoundHandler;
-import de.peacepunkt.mcpvpminigame.teams.Team;
-
 
 public class Main extends JavaPlugin implements Listener {
-        static ChatColor serverChatColor = ChatColor.GREEN;
+        public static ChatColor serverChatColor = ChatColor.GREEN;
+        public static int nopvp = 15; //secs
+
         World lobby;
         RoundHandler handler;
         Map<UUID, PermissionAttachment> permissions;
 
         @Override
         public void onEnable() {
-                lobby = checkLobby();
-                System.out.println(lobby);
                 permissions = new HashMap<>();
 
+                //loads or creates the lobby world
+                lobby = checkLobby();
+
+                //registers own events
                 getServer().getPluginManager().registerEvents(this, this);
+
+                //initialising our fancy ass RoundHandler
                 handler = new RoundHandler(this);
 
                 //register all command helper classes here
+                new TeamCommands(this);
                 new OpCommands(this);
                 new PositionCommands(this);
 
-                (new PositionTracker(this, 30)).start(); // 1 min lag
                 
         }
 
-        public RoundHandler getHandler() {
-                return handler;
-        }
         @Override
         public void onDisable() {
 
         }
+
         @EventHandler
         public void onPlayerJoin(PlayerJoinEvent event) {
-                Location l = new Location(lobby, lobby.getSpawnLocation().getX(), lobby.getSpawnLocation().getY(), lobby.getSpawnLocation().getZ());
-                event.getPlayer().teleport(l);
-                if(permissions.containsKey(event.getPlayer().getUniqueId())) {
-                        addLeaderPermission(event.getPlayer());
-                }
+                //check if player had a team and if he was the leader of that team
                 Team t = handler.getTeamOfPlayer(event.getPlayer());
+                boolean isLeader = permissions.containsKey(event.getPlayer().getUniqueId());
                 if (t != null) {
-                        event.getPlayer().sendMessage(serverChatColor + "You're still member of " + t.getDescription());
+                        if(isLeader) {
+                                addLeaderPermission(event.getPlayer());
+                        }
+                        t.addPlayer(Bukkit.getOfflinePlayer(event.getPlayer().getUniqueId()), isLeader);
+                        if(event.getPlayer().getWorld().getName().equals("lobby") && handler.getRound().isRunning()) {
+                                handler.tpPlayerIntoGame(event.getPlayer());
+                        }
                 } else {
+                        //tp to lobby
+                        clearInventory(event.getPlayer());
+                        Location l = new Location(lobby, lobby.getSpawnLocation().getX(), lobby.getSpawnLocation().getY(), lobby.getSpawnLocation().getZ());
+                        event.getPlayer().teleport(l);
                         event.getPlayer().sendMessage(serverChatColor + "You're in no team yet. Wait for a team leader to invite you or ask an admin to create a team for you.");
                 }
         }
-        public void addLeaderPermission(Player p) {
+
+        public void clearInventory(Player player) {
+                player.getInventory().clear();
+                player.getEnderChest().clear();
+                player.setHealth(20);
+                player.setExp(0);
+        }
+        public RoundHandler getHandler() {
+                return handler;
+        }
+
+        private void addLeaderPermission(Player p) {
                 UUID id = p.getUniqueId();
-                if(p != null) {
-                        PermissionAttachment a = p.addAttachment(this, "leader", true);
-                        Team t = handler.getTeamOfPlayer(p);
+                PermissionAttachment a = p.addAttachment(this, "leader", true);
+                Team t = handler.getTeamOfLeader(p);
+                if (t != null) {
                         p.sendMessage(ChatColor.GREEN + "You're the team leader of team " + t.getDescription());
                         permissions.put(id, a);
-                        //savePermissions();
-                } else {
-                        permissions.put(id, null);
                 }
         }
 
+        //loads or creates the lobby world
         private World checkLobby() {
-                System.out.println("");
                 for(World w : Bukkit.getWorlds()) {
                         System.out.println(w);
                 }
-                System.out.println("");
-
-                System.out.println("loading lobby");
                 World ret = Bukkit.getWorld("lobby");
                 if(ret == null) {
-                        System.out.println("starting world creation");
                         WorldCreator creator = new WorldCreator("lobby");
                         //creator.type(WorldType.CUSTOMIZED);
                         creator.environment(World.Environment.NORMAL);
                         creator.generateStructures(false);
                         creator.generator(new SpawnWorldGenerator());
                         World w = Bukkit.createWorld(creator);
-                        w.setGameRule(GameRule.DO_FIRE_TICK, false);
-                        w.setGameRule(GameRule.DO_MOB_SPAWNING, false);
-                        w.setGameRule(GameRule.DO_PATROL_SPAWNING, false);
-                        w.setGameRule(GameRule.DO_TRADER_SPAWNING, false);
-                        w.setGameRule(GameRule.MOB_GRIEFING, false);
-                        w.setGameRule(GameRule.RANDOM_TICK_SPEED, 0);
-                        w.setGameRule(GameRule.DO_WEATHER_CYCLE, false);
-                        w.setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false);
-                        w.setSpawnLocation(0, 151, 0);
-                        w.setTime(1000);
-                        System.out.println("World creation successful.");
+                        if (w != null) {
+                                w.setGameRule(GameRule.DO_FIRE_TICK, false);
+                                w.setGameRule(GameRule.DO_MOB_SPAWNING, false);
+                                w.setGameRule(GameRule.DO_PATROL_SPAWNING, false);
+                                w.setGameRule(GameRule.DO_TRADER_SPAWNING, false);
+                                w.setGameRule(GameRule.MOB_GRIEFING, false);
+                                w.setGameRule(GameRule.RANDOM_TICK_SPEED, 0);
+                                w.setGameRule(GameRule.DO_WEATHER_CYCLE, false);
+                                w.setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false);
+                                w.setSpawnLocation(0, 151, 0);
+                                w.setTime(1000);
+                        }
                         ret = w;
-                        System.out.println(ret);
 
                 }
                 return ret;
+        }
+
+        @EventHandler
+        public void onAsyncPlayerChatEvent(AsyncPlayerChatEvent event){
+                //if player has a team, automatically send the message to team members only
+                Team t = handler.getTeamOfPlayer(event.getPlayer());
+                if (t != null) {
+                        t.sendMessage(event.getPlayer(), event.getMessage());
+                        event.setCancelled(true);
+                }
+        }
+
+        @EventHandler
+        public void onPlayerRespawnEvent(PlayerRespawnEvent event) {
+                if(event.getPlayer().getWorld().getName().equals("lobby")) {
+                        event.setRespawnLocation(new Location(lobby, lobby.getSpawnLocation().getX(), lobby.getSpawnLocation().getY(), lobby.getSpawnLocation().getZ()));
+                }
         }
 }
