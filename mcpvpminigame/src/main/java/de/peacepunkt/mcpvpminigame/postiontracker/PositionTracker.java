@@ -111,7 +111,7 @@ public class PositionTracker implements Listener {
 
     /**
      * Updates compass of player
-     * @param Player to update
+     * @param p to update
      * @return true if successfull
      */
     public boolean updateCompass(Player p) {
