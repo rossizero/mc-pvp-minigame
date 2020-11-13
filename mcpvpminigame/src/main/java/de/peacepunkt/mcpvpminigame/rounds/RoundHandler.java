@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 
 import de.peacepunkt.mcpvpminigame.Main;
 import de.peacepunkt.mcpvpminigame.teams.Team;
+import org.bukkit.event.HandlerList;
 
 public class RoundHandler {
     private Round round;
@@ -70,15 +71,6 @@ public class RoundHandler {
         return null;
     }
 
-    public boolean isColorFree(ChatColor color) {
-        for(Team t : teams) {
-            if(color.equals(t.getColor())) {
-                return false;
-            }
-        }
-        return true;
-    }
-
     public Main getMain() {
         return main;
     }
@@ -93,12 +85,14 @@ public class RoundHandler {
 
     public void stopRound() {
         round.stop();
+        HandlerList.unregisterAll(round);
         for(Player player: Bukkit.getOnlinePlayers()) {
             main.clearInventory(player);
         }
         for(Team t: teams) {
-            removeTeam(t);
+            t.clear();
         }
+        teams.clear();
         teams = new ArrayList<Team>();
         round = new Round(this);
 
@@ -118,4 +112,9 @@ public class RoundHandler {
         }
         return -1;
     }
+    public void removeTeam(Team t) {
+        t.clear();
+        teams.remove(t);
+    }
+
 }

@@ -23,10 +23,11 @@ public class Round implements Listener {
     }
 
     public void start() {
-        tpPlayersIntoWorld("world");
+        tpPlayersIntoWorld("world", true);
         startSound();
         running = true;
         Bukkit.broadcastMessage(Main.serverChatColor + "pvp disabled for 5 mins from now");
+        Bukkit.broadcastMessage(ChatColor.GRAY + "" + ChatColor.ITALIC + "Zitat Mo: 'Wohin zeigt ein Kompass eigentlich standardmäßig?'");
         noPvpCooldown = new BukkitRunnable() {
             @Override
             public void run() {
@@ -55,10 +56,18 @@ public class Round implements Listener {
         }
     }
 
-    private void tpPlayersIntoWorld(String worldname) {
+    private void tpPlayersIntoWorld(String worldname, boolean teamMembersOnly) {
         World world = Bukkit.getWorld(worldname);
         for(Player p: Bukkit.getOnlinePlayers()) {
-            p.teleport(new Location(world, world.getSpawnLocation().getX(), world.getSpawnLocation().getY(), world.getSpawnLocation().getZ()));
+            if(teamMembersOnly) {
+                Team t = handler.getTeamOfPlayer(p);
+                if (t != null) {
+                    p.teleport(new Location(world, world.getSpawnLocation().getX(), world.getSpawnLocation().getY(), world.getSpawnLocation().getZ()));
+                }
+            } else {
+
+                p.teleport(new Location(world, world.getSpawnLocation().getX(), world.getSpawnLocation().getY(), world.getSpawnLocation().getZ()));
+            }
         }
     }
 
@@ -75,6 +84,10 @@ public class Round implements Listener {
     }
 
     public void stop() {
-        tpPlayersIntoWorld("lobby");
+        if(!noPvpCooldown.isCancelled()) {
+            noPvpCooldown.cancel();
+            Bukkit.broadcastMessage(Main.serverChatColor + "canceled");
+        }
+        tpPlayersIntoWorld("lobby", false);
     }
 }

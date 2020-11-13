@@ -26,12 +26,9 @@ public class TeamCommands {
                     if (t == null) {
                         sender.sendMessage(Main.serverChatColor + "You can't do that");
                     } else {
-
-                        System.out.println("hä0");
                         if (strings.length == 1) {
                             String targetName = strings[0];
                             Player target = Bukkit.getPlayer(targetName);
-                            System.out.println("hä1 " + target);
                             if (target != null) {
                                 if (!target.equals(sender)) {
                                     if (pendingInviteRequests.containsValue(target)) {
