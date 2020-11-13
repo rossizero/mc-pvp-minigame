@@ -24,7 +24,7 @@ public class RoundHandler {
         round = new Round(this);
         main.getServer().getPluginManager().registerEvents(round, main);
         this.main = main;
-        positionTracker = new PositionTracker(main, 2);
+        positionTracker = new PositionTracker(main, 10);
     }
 
     public void startRound() {
