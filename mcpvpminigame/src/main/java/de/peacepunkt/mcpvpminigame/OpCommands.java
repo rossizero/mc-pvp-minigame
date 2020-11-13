@@ -86,6 +86,9 @@ class OpCommands {
                                 if(neww != null) {
                                     PermissionAttachment a = leader.addAttachment(main, "leader", true);
                                     main.permissions.put(leader.getUniqueId(), a);
+                                    if(main.getHandler().getRound().isRunning()) {
+                                        main.getHandler().tpPlayerIntoGame(leader);
+                                    }
                                 } else {
                                     sender.sendMessage(Main.serverChatColor + "There are already to many teams...");
                                     return false;

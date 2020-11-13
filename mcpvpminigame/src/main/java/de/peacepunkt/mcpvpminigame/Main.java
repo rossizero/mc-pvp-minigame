@@ -11,6 +11,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -137,10 +138,9 @@ public class Main extends JavaPlugin implements Listener {
         }
 
         @EventHandler
-        public void onPlayerDeathEvent(PlayerDeathEvent event) {
-                if(event.getEntity().getWorld().getName().equals("lobby")) {
-                        Location l = new Location(lobby, lobby.getSpawnLocation().getX(), lobby.getSpawnLocation().getY(), lobby.getSpawnLocation().getZ());
-                        event.getEntity().teleport(l);
+        public void onPlayerRespawnEvent(PlayerRespawnEvent event) {
+                if(event.getPlayer().getWorld().getName().equals("lobby")) {
+                        event.setRespawnLocation(new Location(lobby, lobby.getSpawnLocation().getX(), lobby.getSpawnLocation().getY(), lobby.getSpawnLocation().getZ()));
                 }
         }
 }
