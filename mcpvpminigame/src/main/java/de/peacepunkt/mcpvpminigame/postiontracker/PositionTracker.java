@@ -20,6 +20,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 import de.peacepunkt.mcpvpminigame.Main;
 import de.peacepunkt.mcpvpminigame.rounds.RoundHandler;
+import de.peacepunkt.mcpvpminigame.teams.Team;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 
@@ -67,8 +68,8 @@ public class PositionTracker implements Listener {
         Action action = event.getAction();
         // check for left right click with a compass
         if(action.equals(Action.RIGHT_CLICK_AIR) || action.equals(Action.RIGHT_CLICK_BLOCK)) {
-            event.setCancelled(true);
             if(event.getItem() != null && event.getItem().getType().equals(Material.COMPASS)) {
+                event.setCancelled(true);
 
                 Player p = event.getPlayer();
                 Player target = getNextTarget(p);
@@ -136,25 +137,25 @@ public class PositionTracker implements Listener {
      */
     public Player getNextTarget(Player p) {
         UUID uuid = selectedTargets.get(p.getUniqueId());
-        List<Player> players = this.main.getHandler().getPlayers(); // Sorted players
-        players.remove(p);
+        List<UUID> players = this.main.getHandler().getPlayers().stream().map(Player::getUniqueId).collect(Collectors.toList());// Sorted players
+        
+        players.remove(p.getUniqueId());
 
         if(players.size() == 0) {
             return null;
         }
 
         if(uuid == null) {
-            return players.get(0);
+            return Bukkit.getPlayer(players.get(0));
         }
-        
+
         // Player currently has a target
-        List<UUID> uuids = players.stream().map(Player::getUniqueId).collect(Collectors.toList());
-        int index = uuids.indexOf(uuid);
+        int index = players.indexOf(uuid);
         if(++index >= players.size()){
             index = 0;
         }
 
-        return players.get(index);
+        return Bukkit.getPlayer(players.get(index));
     }
 
     /**
@@ -165,9 +166,14 @@ public class PositionTracker implements Listener {
     public Location getLastLocation(Player p) {
         RoundHandler handler = this.main.getHandler();
         Location loc = null;
+        Team team = handler.getTeamOfPlayer(p);
+        
+        if(team == null) {
+            return null;
+        }
 
         // Live tracking
-        if(handler.getTeamOfPlayer(p) == handler.enderTeam) {
+        if(team == handler.enderTeam) {
             loc = playerlocationsByTime.get(getCurrentTimePoint()).get(p.getUniqueId());
         }else { // Shifted tracking
             loc = playerlocationsByTime.get(getLastTimePoint()).get(p.getUniqueId());
