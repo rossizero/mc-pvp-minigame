@@ -5,6 +5,7 @@ import de.peacepunkt.mcpvpminigame.rounds.RoundHandler;
 import de.peacepunkt.mcpvpminigame.teams.Team;
 import de.peacepunkt.mcpvpminigame.teams.TeamCommands;
 import org.bukkit.*;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -23,6 +24,7 @@ import java.util.UUID;
 public class Main extends JavaPlugin implements Listener {
         public static ChatColor serverChatColor = ChatColor.GREEN;
         public static int nopvp = 15; //secs
+        public static int radius = 15;
 
         World lobby;
         RoundHandler handler;
@@ -141,6 +143,32 @@ public class Main extends JavaPlugin implements Listener {
         public void onPlayerRespawnEvent(PlayerRespawnEvent event) {
                 if(event.getPlayer().getWorld().getName().equals("lobby")) {
                         event.setRespawnLocation(new Location(lobby, lobby.getSpawnLocation().getX(), lobby.getSpawnLocation().getY(), lobby.getSpawnLocation().getZ()));
+                }
+        }
+
+        private void createSpawnStructure() {
+                World w = Bukkit.getWorld("world");
+                if (w != null) {
+                        Block b = null;
+                        int i = 0;
+                        while (b == null) {
+                                try {
+                                        b = w.getHighestBlockAt(i, 0);
+
+                                } catch (NullPointerException ignored) {
+                                        i++;
+                                }
+                        }
+                        int rSquared = radius * radius;
+                        for (int x = -radius; x <= radius; x++) {
+                                for (int z = -radius; z <= radius; z++) {
+                                        if ((x) * (x) + (z) * (z) <= rSquared) {
+                                                w.getBlockAt(x, b.getY(), z).setType(Material.BEDROCK);
+                                        }
+                                }
+                        }
+                } else {
+                        System.out.println("there is no world named world and that is pretty shitty");
                 }
         }
 }
