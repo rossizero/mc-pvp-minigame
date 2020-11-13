@@ -70,7 +70,6 @@ public class PositionTracker implements Listener {
         if(action.equals(Action.RIGHT_CLICK_AIR) || action.equals(Action.RIGHT_CLICK_BLOCK)) {
             if(event.getItem() != null && event.getItem().getType().equals(Material.COMPASS)) {
                 event.setCancelled(true);
-
                 Player p = event.getPlayer();
                 Player target = getNextTarget(p);
                 if(target == null) {
