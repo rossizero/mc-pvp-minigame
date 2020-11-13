@@ -1,12 +1,12 @@
 package de.peacepunkt.mcpvpminigame.teams;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import de.peacepunkt.mcpvpminigame.Main;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class Team {
     OfflinePlayer leader;

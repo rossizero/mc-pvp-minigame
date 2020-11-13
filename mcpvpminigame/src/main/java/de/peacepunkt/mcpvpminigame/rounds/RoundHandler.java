@@ -1,30 +1,34 @@
 package de.peacepunkt.mcpvpminigame.rounds;
 
-import de.peacepunkt.mcpvpminigame.Main;
-import de.peacepunkt.mcpvpminigame.teams.Team;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.World;
-import org.bukkit.entity.Player;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import de.peacepunkt.mcpvpminigame.postiontracker.PositionTracker;
+import org.bukkit.*;
+import org.bukkit.entity.Player;
+
+import de.peacepunkt.mcpvpminigame.Main;
+import de.peacepunkt.mcpvpminigame.teams.Team;
 
 public class RoundHandler {
     private Round round;
     private Main main;
     private List<Team> teams;
+    public Team enderTeam = null;
+    private PositionTracker positionTracker;
+
 
     public RoundHandler(Main main) {
         teams = new ArrayList<Team>();
         round = new Round(this);
         main.getServer().getPluginManager().registerEvents(round, main);
         this.main = main;
+        positionTracker = new PositionTracker(main, 2);
     }
 
     public void startRound() {
         round.start();
+        positionTracker.start();
     }
 
     public List<Player> getPlayers() {
@@ -44,11 +48,6 @@ public class RoundHandler {
         } else {
             return null;
         }
-    }
-
-    public void removeTeam(Team t) {
-        t.clear();
-        teams.remove(t);
     }
 
     public Team getTeamOfPlayer(Player player) {

@@ -2,6 +2,7 @@ package de.peacepunkt.mcpvpminigame.rounds;
 
 
 import de.peacepunkt.mcpvpminigame.Main;
+import de.peacepunkt.mcpvpminigame.teams.Team;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -25,6 +26,7 @@ public class Round implements Listener {
         tpPlayersIntoWorld("world");
         startSound();
         running = true;
+        Bukkit.broadcastMessage(Main.serverChatColor + "pvp disabled for 5 mins from now");
         noPvpCooldown = new BukkitRunnable() {
             @Override
             public void run() {
@@ -48,7 +50,7 @@ public class Round implements Listener {
     }
     private void startSound() {
         for (Player p : Bukkit.getOnlinePlayers()) {
-            p.sendTitle("game started", "", 10, 70, 10);
+            p.sendTitle("lets fetz", "", 10, 70, 10);
             p.playSound(p.getLocation(), Sound.ENTITY_WITHER_SPAWN, 7, 0);
         }
     }
