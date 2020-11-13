@@ -85,6 +85,7 @@ public class RoundHandler {
 
     public void stopRound() {
         round.stop();
+        positionTracker.stop();
         HandlerList.unregisterAll(round);
         for(Player player: Bukkit.getOnlinePlayers()) {
             main.clearInventory(player);
