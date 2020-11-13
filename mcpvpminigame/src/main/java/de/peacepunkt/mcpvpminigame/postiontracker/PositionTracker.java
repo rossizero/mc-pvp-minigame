@@ -67,9 +67,8 @@ public class PositionTracker implements Listener {
         Action action = event.getAction();
         // check for left right click with a compass
         if(action.equals(Action.RIGHT_CLICK_AIR) || action.equals(Action.RIGHT_CLICK_BLOCK)) {
-            event.setCancelled(true);
             if(event.getItem() != null && event.getItem().getType().equals(Material.COMPASS)) {
-
+                event.setCancelled(true);
                 Player p = event.getPlayer();
                 Player target = getNextTarget(p);
                 if(target == null) {

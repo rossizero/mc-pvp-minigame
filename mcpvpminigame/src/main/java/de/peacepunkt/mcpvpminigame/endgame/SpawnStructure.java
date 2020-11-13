@@ -6,8 +6,15 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityCombustEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemStack;
 
 
 public class SpawnStructure implements Listener {
@@ -17,9 +24,41 @@ public class SpawnStructure implements Listener {
     public SpawnStructure(Main main) {
         this.main = main;
         this.target = createSpawnStructure();
-        System.out.println("target: " +  target);
     }
-
+    @EventHandler
+    public void onEntityCombustEvent(EntityCombustEvent event) {
+        System.out.println(event.getEntity());
+        System.out.println(event.getEntityType());
+        if(event.getEntityType().equals(EntityType.DROPPED_ITEM)) {
+            Item i = (Item) event.getEntity();
+            if(i.getItemStack().getType().equals(Material.DRAGON_EGG)) {
+                event.setCancelled(true); //TODO not working
+            }
+        }
+    }
+    @EventHandler
+    public void onBlockPlacedEvent(BlockPlaceEvent event) {
+        if (event.getBlock().getType().equals(Material.DRAGON_EGG)) {
+            if(event.getBlock().equals(target)) {
+                System.out.println("PLACED ON TARGET");
+            }
+        }
+    }
+    @EventHandler
+    public void onPlayerInteractEvent(PlayerInteractEvent event) {
+        if(event.getClickedBlock() != null) {
+            if (event.getClickedBlock().getType().equals(Material.DRAGON_EGG)) {
+                if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
+                    event.setCancelled(true);
+                } else if (event.getAction().equals(Action.LEFT_CLICK_BLOCK)) {
+                    event.setCancelled(true);
+                    event.getClickedBlock().setType(Material.AIR);
+                    ItemStack item = new ItemStack(Material.DRAGON_EGG);
+                    event.getPlayer().getWorld().dropItem(event.getClickedBlock().getLocation(), item);
+                }
+            }
+        }
+    }
     private Block createSpawnStructure() {
         World w = Bukkit.getWorld("world");
         if (w != null) {

@@ -46,7 +46,13 @@ public class Team {
             joinMsg(player.getPlayer(), false);
             changeNickName(player.getPlayer());
         }
-        if(!mates.contains(player))
+        boolean found = false;
+        for(OfflinePlayer p: mates) {
+            if(p.getUniqueId().equals(player.getUniqueId())) {
+                found = true;
+            }
+        }
+        if(!found)
             mates.add(player);
     }
 
