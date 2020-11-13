@@ -133,4 +133,12 @@ public class Main extends JavaPlugin implements Listener {
                         event.setCancelled(true);
                 }
         }
+
+        @EventHandler
+        public void onPlayerDeathEvent(PlayerDeathEvent event) {
+                if(event.getEntity().getWorld().getName().equals("lobby")) {
+                        Location l = new Location(lobby, lobby.getSpawnLocation().getX(), lobby.getSpawnLocation().getY(), lobby.getSpawnLocation().getZ());
+                        event.getEntity().teleport(l);
+                }
+        }
 }
