@@ -1,25 +1,30 @@
 package de.peacepunkt.mcpvpminigame;
 
-import de.peacepunkt.mcpvpminigame.endgame.SpawnStructure;
-import de.peacepunkt.mcpvpminigame.postiontracker.PositionCommands;
-import de.peacepunkt.mcpvpminigame.rounds.RoundHandler;
-import de.peacepunkt.mcpvpminigame.teams.Team;
-import de.peacepunkt.mcpvpminigame.teams.TeamCommands;
-import org.bukkit.*;
-import org.bukkit.block.Block;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.GameRule;
+import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.WorldCreator;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import de.peacepunkt.mcpvpminigame.endgame.SpawnStructure;
+import de.peacepunkt.mcpvpminigame.postiontracker.EndPortalTracker;
+import de.peacepunkt.mcpvpminigame.postiontracker.PositionCommands;
+import de.peacepunkt.mcpvpminigame.rounds.RoundHandler;
+import de.peacepunkt.mcpvpminigame.teams.Team;
+import de.peacepunkt.mcpvpminigame.teams.TeamCommands;
 
 
 public class Main extends JavaPlugin implements Listener {
@@ -49,6 +54,7 @@ public class Main extends JavaPlugin implements Listener {
                 new TeamCommands(this);
                 new OpCommands(this);
                 new PositionCommands(this);
+                new EndPortalTracker(this);
 
                 spawnStructure = new SpawnStructure(this);
                 getServer().getPluginManager().registerEvents(spawnStructure, this);
