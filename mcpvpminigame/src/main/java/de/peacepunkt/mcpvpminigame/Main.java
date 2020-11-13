@@ -42,7 +42,7 @@ public class Main extends JavaPlugin implements Listener {
                 new OpCommands(this);
                 new PositionCommands(this);
 
-                (new PositionTracker(this, 2)).start(); // 1 min lag
+                (new PositionTracker(this, 30)).start(); // 1 min lag
                 
         }
 

@@ -12,9 +12,11 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 import de.peacepunkt.mcpvpminigame.Main;
 import de.peacepunkt.mcpvpminigame.rounds.RoundHandler;
@@ -34,48 +36,104 @@ public class PositionTracker implements Listener {
 
     public PositionTracker(Main pl, int lag){
         this.main = pl;
-        for(int i = 0; i < positionLag; i++) {
+
+        // Initialize list
+        for(int i = 0; i < lag; i++) {
             playerlocationsByTime.add(new HashMap<UUID, Location>());
         }
+
+
         pl.getServer().getPluginManager().registerEvents(this, pl);
         this.positionLag = lag;
     }
 
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onLogout(PlayerQuitEvent event) {
+        Player leaver_player = event.getPlayer();
+        UUID leaver  = leaver_player.getUniqueId();
+        selectedTargets.forEach((player, target) -> {
+            if(target == leaver) {
+                Player toMsg = Bukkit.getPlayer(player);
+                if(toMsg != null) {
+                    toMsg.sendMessage(ChatColor.RED + "Dein Kompass zeigt jetzt auf die letzte bekannte Position von "+leaver_player.getDisplayName());
+                }
+            }
+        });
+    }
+
     @EventHandler
-    public void onLeftClick(PlayerInteractEvent event) {
-        if(event.getAction().equals(Action.RIGHT_CLICK_AIR)) {
-            if(event.getItem().getType().equals(Material.COMPASS)) {
+    public void onRightClick(PlayerInteractEvent event) {
+
+        Action action = event.getAction();
+        // check for left right click with a compass
+        if(action.equals(Action.RIGHT_CLICK_AIR) || action.equals(Action.RIGHT_CLICK_BLOCK)) {
+            event.setCancelled(true);
+            if(event.getItem() != null && event.getItem().getType().equals(Material.COMPASS)) {
+
                 Player p = event.getPlayer();
                 Player target = getNextTarget(p);
                 if(target == null) {
                     p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText("Es gibt aktuell keinen Spieler, auf den gezeigt werden kann. Vielleicht sind die Teams leer?"));
                 }else{
+
+                    // Try to set target, only works when the lag time has passed once
                     if(setTargetOf(p, target)) {
                         p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText("Dein Kompass zeigt jetzt auf "+target.getDisplayName()));
                     }else{
-                        p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText("Position von Spieler "+target.getDisplayName()+" ist unbekannt."));
-                        
+                        p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText("Position von Spieler "+target.getDisplayName()+ChatColor.RESET+" ist noch unbekannt."));
                     }
                 }
             }
         }
     }
 
+    /**
+     * Sets target of a player, this will also influence the players compass.
+     * @param p
+     * @param target
+     * @return
+     */
     public boolean setTargetOf(Player p, Player target) {
         if(target == null || p == null) {
             return false;
         }
+
         selectedTargets.put(p.getUniqueId(), target.getUniqueId());
         if(p.isOnline()){
             Location loc = getLastLocation(target);
             if(loc != null) {
-                p.setCompassTarget(target.getLocation());
+                p.setCompassTarget(loc);
                 return true;
             }
-        }   
+        }
         return false;
      }
 
+    /**
+     * Updates compass of player
+     * @param Player to update
+     * @return true if successfull
+     */
+    public boolean updateCompass(Player p) {
+        if(p.isOnline()) {
+            UUID target = selectedTargets.get(p.getUniqueId());
+            Player target_player = Bukkit.getPlayer(target);
+            if(target_player != null) {
+                Location loc = getLastLocation(target_player);
+                if(loc != null) {
+                    p.setCompassTarget(loc);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Determines the next compass target of a player, determined by their current selection.
+     * @param p
+     * @return
+     */
     public Player getNextTarget(Player p) {
         UUID uuid = selectedTargets.get(p.getUniqueId());
         List<Player> players = this.main.getHandler().getPlayers(); // Sorted players
@@ -99,17 +157,37 @@ public class PositionTracker implements Listener {
         return players.get(index);
     }
 
+    /**
+     * Loads location of player, dependant if he is a dragon killer.
+     * @param p
+     * @return
+     */
     public Location getLastLocation(Player p) {
         RoundHandler handler = this.main.getHandler();
         Location loc = null;
 
         // Live tracking
         if(handler.getTeamOfPlayer(p) == handler.enderTeam) {
-            loc = playerlocationsByTime.get(timerIndex).get(p.getUniqueId());
+            loc = playerlocationsByTime.get(getCurrentTimePoint()).get(p.getUniqueId());
         }else { // Shifted tracking
-            loc = playerlocationsByTime.get((timerIndex + 1) % positionLag).get(p.getUniqueId());
+            loc = playerlocationsByTime.get(getLastTimePoint()).get(p.getUniqueId());
         }
         return loc;
+    }
+
+    // called every 60 seconds.
+    private void updateTimePoint() {
+        timerIndex = (timerIndex + 1) % positionLag;
+    }
+
+    // timerIndex -1 is last updated element
+    private int getCurrentTimePoint() {
+        return (timerIndex - 1) % positionLag;
+    }
+
+    // timerIndex always has the value of the latest update made.
+    private int getLastTimePoint() {
+        return timerIndex;
     }
 
     /**
@@ -132,14 +210,23 @@ public class PositionTracker implements Listener {
                     HashMap<UUID, Location> newLocations = new HashMap<UUID, Location>();
                     for(Player player : players) {
                         newLocations.put(player.getUniqueId(), player.getLocation());
+
+
                     }
 
+                    // Save at point in time: timerIndex
                     playerlocationsByTime.set(timerIndex, newLocations);
-                    timerIndex = (timerIndex + 1) % positionLag;
-                    
+
+                    // Increment timer once, this timer is only changed here
+                    updateTimePoint();
+
+                    // we need to update all the compasses
+                    for(Player player : players) {
+                        updateCompass(player);
+                    }
                 }
     
-            }, 0L, 60*20L); // 60 seconds
+            }, 0L, 2*20L); // 60 seconds
             isRunning = true;
             return true;
         }
@@ -147,7 +234,9 @@ public class PositionTracker implements Listener {
     }
 
     public void stop() {
-        Bukkit.getScheduler().cancelTask(taskId);
-        isRunning = false;
+        if(isRunning) {
+            Bukkit.getScheduler().cancelTask(taskId);
+            isRunning = false;
+        }
     }
 }
