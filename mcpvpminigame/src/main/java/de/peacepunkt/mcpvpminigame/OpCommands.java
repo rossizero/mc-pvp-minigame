@@ -69,7 +69,7 @@ class OpCommands {
             @Override
             public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
                 if (commandSender instanceof Player) {
-                    if (strings.length == 4) {
+                    if (strings.length == 3) {
                         try {
                             String name = strings[0];
                             String short_name = strings[1];
@@ -80,10 +80,14 @@ class OpCommands {
                                 return false;
                             Team t = main.getHandler().getTeamOfPlayer(leader);
                             if (t == null) {
-                                int color = Integer.parseInt(strings[3]);
-                                main.getHandler().createTeam(name, short_name, leader, color);
-                                PermissionAttachment a = leader.addAttachment(main, "leader", true);
-                                main.permissions.put(leader.getUniqueId(), a);
+                                Team neww = main.getHandler().createTeam(name, short_name, leader);
+                                if(neww != null) {
+                                    PermissionAttachment a = leader.addAttachment(main, "leader", true);
+                                    main.permissions.put(leader.getUniqueId(), a);
+                                } else {
+                                    sender.sendMessage(Main.serverChatColor + "There are already to many teams...");
+                                    return false;
+                                }
                             } else {
                                 sender.sendMessage(Main.serverChatColor + "this player already has a team");
                             }

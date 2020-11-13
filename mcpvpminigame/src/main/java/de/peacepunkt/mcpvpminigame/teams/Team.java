@@ -76,7 +76,7 @@ public class Team {
             case 4:
                 return ChatColor.LIGHT_PURPLE;
             case 5:
-                return ChatColor.BLACK;
+                return ChatColor.DARK_AQUA;
             case 6:
                 return ChatColor.GRAY;
             case 7:

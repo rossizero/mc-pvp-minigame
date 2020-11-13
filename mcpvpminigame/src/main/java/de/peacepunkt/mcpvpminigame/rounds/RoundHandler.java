@@ -35,10 +35,15 @@ public class RoundHandler {
         return players;
     }
 
-    public Team createTeam(String name, String short_name, Player leader, int color) {
-        Team t = new Team(name, short_name, leader, color);
-        teams.add(t);
-        return t;
+    public Team createTeam(String name, String short_name, Player leader) {
+        int color = getFreeColor();
+        if(color != -1) {
+            Team t = new Team(name, short_name, leader, color);
+            teams.add(t);
+            return t;
+        } else {
+            return null;
+        }
     }
 
     public void removeTeam(Team t) {
@@ -92,9 +97,26 @@ public class RoundHandler {
         for(Player player: Bukkit.getOnlinePlayers()) {
             main.clearInventory(player);
         }
-
+        for(Team t: teams) {
+            removeTeam(t);
+        }
         teams = new ArrayList<Team>();
         round = new Round(this);
 
+    }
+
+    private int getFreeColor() {
+        for(int i = 0; i < 10; i++) {
+            boolean found = false;
+            for(Team t : teams) {
+                if(t.getColor().equals(Team.colorById(i))) {
+                    found = true;
+                }
+            }
+            if(!found) {
+                return i;
+            }
+        }
+        return -1;
     }
 }
