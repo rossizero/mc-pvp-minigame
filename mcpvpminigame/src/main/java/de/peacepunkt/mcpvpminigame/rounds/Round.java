@@ -57,7 +57,7 @@ public class Round implements Listener {
 
     private void tpPlayersIntoWorld(String worldname) {
         World world = Bukkit.getWorld(worldname);
-        for(Player p: handler.getPlayers()) {
+        for(Player p: Bukkit.getOnlinePlayers()) {
             p.teleport(new Location(world, world.getSpawnLocation().getX(), world.getSpawnLocation().getY(), world.getSpawnLocation().getZ()));
         }
     }

@@ -8,6 +8,7 @@ import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.permissions.PermissionAttachment;
@@ -20,7 +21,7 @@ import java.util.UUID;
 
 public class Main extends JavaPlugin implements Listener {
         public static ChatColor serverChatColor = ChatColor.GREEN;
-        public static int nopvp = 5 * 60; //secs
+        public static int nopvp = 15; //secs
 
         World lobby;
         RoundHandler handler;
@@ -77,6 +78,8 @@ public class Main extends JavaPlugin implements Listener {
         public void clearInventory(Player player) {
                 player.getInventory().clear();
                 player.getEnderChest().clear();
+                player.setHealth(20);
+                player.setExp(0);
         }
         public RoundHandler getHandler() {
                 return handler;
@@ -130,6 +133,14 @@ public class Main extends JavaPlugin implements Listener {
                 if (t != null) {
                         t.sendMessage(event.getPlayer(), event.getMessage());
                         event.setCancelled(true);
+                }
+        }
+
+        @EventHandler
+        public void onPlayerDeathEvent(PlayerDeathEvent event) {
+                if(event.getEntity().getWorld().getName().equals("lobby")) {
+                        Location l = new Location(lobby, lobby.getSpawnLocation().getX(), lobby.getSpawnLocation().getY(), lobby.getSpawnLocation().getZ());
+                        event.getEntity().teleport(l);
                 }
         }
 }

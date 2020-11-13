@@ -39,10 +39,15 @@ public class RoundHandler {
         return players;
     }
 
-    public Team createTeam(String name, String short_name, Player leader, int color) {
-        Team t = new Team(name, short_name, leader, color);
-        teams.add(t);
-        return t;
+    public Team createTeam(String name, String short_name, Player leader) {
+        int color = getFreeColor();
+        if(color != -1) {
+            Team t = new Team(name, short_name, leader, color);
+            teams.add(t);
+            return t;
+        } else {
+            return null;
+        }
     }
 
     public Team getTeamOfPlayer(Player player) {
@@ -92,15 +97,25 @@ public class RoundHandler {
             main.clearInventory(player);
         }
         for(Team t: teams) {
-            t.clear();
+            removeTeam(t);
         }
         teams = new ArrayList<Team>();
         round = new Round(this);
 
     }
 
-    public void removeTeam(Team t) {
-        t.clear();
-        teams.remove(t);
+    private int getFreeColor() {
+        for(int i = 0; i < 10; i++) {
+            boolean found = false;
+            for(Team t : teams) {
+                if(t.getColor().equals(Team.colorById(i))) {
+                    found = true;
+                }
+            }
+            if(!found) {
+                return i;
+            }
+        }
+        return -1;
     }
 }
