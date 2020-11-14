@@ -21,7 +21,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import de.peacepunkt.mcpvpminigame.endgame.SpawnStructure;
 import de.peacepunkt.mcpvpminigame.midgame.DragonKillListener;
-import de.peacepunkt.mcpvpminigame.midgame.PlayerLeaveListener;
+import de.peacepunkt.mcpvpminigame.midgame.PlayerTweakListener;
 import de.peacepunkt.mcpvpminigame.postiontracker.EndPortalTracker;
 import de.peacepunkt.mcpvpminigame.postiontracker.PositionCommands;
 import de.peacepunkt.mcpvpminigame.rounds.RoundHandler;
@@ -52,7 +52,6 @@ public class Main extends JavaPlugin implements Listener {
                 //initialising our fancy ass RoundHandler
                 handler = new RoundHandler(this);
 
-                //register all command helper classes here
                 new TeamCommands(this);
                 new OpCommands(this);
                 new PositionCommands(this);
@@ -60,7 +59,7 @@ public class Main extends JavaPlugin implements Listener {
                 // Event Listeners
                 new EndPortalTracker(this);
                 new DragonKillListener(this);
-                new PlayerLeaveListener(this);
+                new PlayerTweakListener(this);
 
                 
                 spawnStructure = new SpawnStructure(this);

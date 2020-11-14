@@ -39,6 +39,7 @@ public class EndPortalTracker implements Listener {
         }
     }
 
+
     @EventHandler
     public void onEnterEndWorld(PlayerPortalEvent event) {
         World from = event.getFrom().getWorld();
