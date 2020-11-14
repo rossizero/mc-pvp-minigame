@@ -170,7 +170,8 @@ public class SpawnStructure implements Listener {
                     event.setCancelled(true);
                     event.getClickedBlock().setType(Material.AIR);
                     ItemStack item = new ItemStack(Material.DRAGON_EGG);
-                    event.getPlayer().getWorld().dropItem(event.getClickedBlock().getLocation(), item);
+                    Item i = event.getPlayer().getWorld().dropItem(event.getClickedBlock().getLocation(), item);
+                    i.setInvulnerable(true);
                     if(event.getClickedBlock().getLocation().equals(target.getLocation())) {
                         for(Player p: Bukkit.getOnlinePlayers()) {
                             p.playSound(p.getLocation(), Sound.ITEM_SHIELD_BREAK, 5, 0);
