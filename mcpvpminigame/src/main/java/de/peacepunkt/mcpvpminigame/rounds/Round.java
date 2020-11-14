@@ -36,7 +36,7 @@ public class Round implements Listener {
             }
         };
         //runs synchronously!
-        noPvpCooldown.runTaskTimer(handler.getMain(), 0, (4*60+50)*20); // Start after 4 min 50 seconds
+        noPvpCooldown.runTaskTimer(handler.getMain(), (4*60+50)*20, 20); // Start after 4 min 50 seconds
         //5 mins no pvp
 
         // change weather to clear/time to 0
