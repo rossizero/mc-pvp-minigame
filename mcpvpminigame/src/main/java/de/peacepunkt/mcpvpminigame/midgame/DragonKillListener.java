@@ -21,7 +21,7 @@ public class DragonKillListener implements Listener {
         this.plugin = plugin;
     }
 
-    @EventHandler"%02d:%02d:%02d".
+    @EventHandler
     public void onDragonHit(EntityDamageByEntityEvent event) {
         if(event.getEntity().getType().equals(EntityType.ENDER_DRAGON)) {
             if(event.getDamager() instanceof Player) {
