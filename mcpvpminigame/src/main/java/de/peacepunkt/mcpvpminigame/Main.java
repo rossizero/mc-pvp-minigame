@@ -4,12 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.GameRule;
-import org.bukkit.Location;
-import org.bukkit.World;
-import org.bukkit.WorldCreator;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -25,6 +20,7 @@ import de.peacepunkt.mcpvpminigame.postiontracker.PositionCommands;
 import de.peacepunkt.mcpvpminigame.rounds.RoundHandler;
 import de.peacepunkt.mcpvpminigame.teams.Team;
 import de.peacepunkt.mcpvpminigame.teams.TeamCommands;
+import org.bukkit.potion.PotionEffect;
 
 
 public class Main extends JavaPlugin implements Listener {
@@ -69,6 +65,9 @@ public class Main extends JavaPlugin implements Listener {
         public void onPlayerJoin(PlayerJoinEvent event) {
                 //check if player had a team and if he was the leader of that team
                 Team t = handler.getTeamOfPlayer(event.getPlayer());
+                for (PotionEffect effect : event.getPlayer().getActivePotionEffects()) {
+                        event.getPlayer().removePotionEffect(effect.getType());
+                }
                 boolean isLeader = permissions.containsKey(event.getPlayer().getUniqueId());
                 if (t != null) {
                         if(isLeader) {
@@ -85,6 +84,21 @@ public class Main extends JavaPlugin implements Listener {
                         event.getPlayer().teleport(l);
                         event.getPlayer().sendMessage(serverChatColor + "You're in no team yet. Wait for a team leader to invite you or ask an admin to create a team for you.");
                 }
+
+                spawnStructure.addPlayerToBar(event.getPlayer());
+        }
+
+        public void waldtraud(Team winningTeam) {
+                if(winningTeam != null) {
+                        for (Player p : Bukkit.getOnlinePlayers()) {
+                                p.sendTitle(winningTeam.getDescription() + ChatColor.RESET + " won this round!", "", 10, 70, 10);
+                        }
+                }
+                for (Player p : Bukkit.getOnlinePlayers()) {
+                        Location l = new Location(lobby, lobby.getSpawnLocation().getX(), lobby.getSpawnLocation().getY(), lobby.getSpawnLocation().getZ());
+                        p.teleport(l);
+                }
+                lobby.playSound(lobby.getSpawnLocation(), Sound.ENTITY_WITHER_SPAWN, 7, 0);
         }
 
         public void clearInventory(Player player) {
@@ -93,6 +107,7 @@ public class Main extends JavaPlugin implements Listener {
                 player.setHealth(20);
                 player.setExp(0);
         }
+
         public RoundHandler getHandler() {
                 return handler;
         }

@@ -9,6 +9,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Vector;
 
 
 public class Round implements Listener {
@@ -23,7 +24,7 @@ public class Round implements Listener {
     }
 
     public void start() {
-        tpPlayersIntoWorld("world", true);
+        tpPlayersIntoWorld("world", true, new Vector(0, -6, 3));
         startSound();
         running = true;
         Bukkit.broadcastMessage(Main.serverChatColor + "pvp disabled for 5 mins from now");
@@ -38,6 +39,7 @@ public class Round implements Listener {
         noPvpCooldown.runTaskTimer(handler.getMain(), 0, 20);
         //5 mins no pvp
     }
+
     private void noPvpCooldown() {
         secondsFromPvpCooldown++;
         if (Main.nopvp - secondsFromPvpCooldown <= 10 && Main.nopvp - secondsFromPvpCooldown > 0) {
@@ -56,17 +58,18 @@ public class Round implements Listener {
         }
     }
 
-    private void tpPlayersIntoWorld(String worldname, boolean teamMembersOnly) {
+    private void tpPlayersIntoWorld(String worldname, boolean teamMembersOnly, Vector offset) {
         World world = Bukkit.getWorld(worldname);
+        Location l = world.getSpawnLocation().clone().add(offset);
+
         for(Player p: Bukkit.getOnlinePlayers()) {
             if(teamMembersOnly) {
                 Team t = handler.getTeamOfPlayer(p);
                 if (t != null) {
-                    p.teleport(new Location(world, world.getSpawnLocation().getX(), world.getSpawnLocation().getY(), world.getSpawnLocation().getZ()));
+                    p.teleport(new Location(world, l.getX(), l.getY(), l.getZ()));
                 }
             } else {
-
-                p.teleport(new Location(world, world.getSpawnLocation().getX(), world.getSpawnLocation().getY(), world.getSpawnLocation().getZ()));
+                p.teleport(new Location(world, l.getX(),l.getY(), l.getZ()));
             }
         }
     }
@@ -88,6 +91,6 @@ public class Round implements Listener {
             noPvpCooldown.cancel();
             Bukkit.broadcastMessage(Main.serverChatColor + "canceled");
         }
-        tpPlayersIntoWorld("lobby", false);
+        tpPlayersIntoWorld("lobby", false, new Vector(0, 0, 0));
     }
 }
