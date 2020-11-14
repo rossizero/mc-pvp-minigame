@@ -44,6 +44,8 @@ public class EndPortalTracker implements Listener {
         if(from.getEnvironment() == Environment.NORMAL) {
             if(to.getEnvironment() == Environment.THE_END) {
                 sources.put(event.getPlayer().getUniqueId(), event.getPlayer().getLocation());
+
+                Bukkit.broadcastMessage(event.getPlayer().getDisplayName()+" entered the end!");
             }
         } 
             

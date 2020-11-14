@@ -10,6 +10,8 @@ import org.bukkit.entity.Player;
 import de.peacepunkt.mcpvpminigame.Main;
 import de.peacepunkt.mcpvpminigame.teams.Team;
 import org.bukkit.event.HandlerList;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 public class RoundHandler {
     private Round round;
@@ -17,6 +19,7 @@ public class RoundHandler {
     private List<Team> teams;
     public Team enderTeam = null;
     private PositionTracker positionTracker;
+    long startTime = 0;
 
 
     public RoundHandler(Main main) {
@@ -30,6 +33,11 @@ public class RoundHandler {
     public void startRound() {
         round.start();
         positionTracker.start();
+        startTime = System.currentTimeMillis();
+    }
+
+    public long getRunningTime() {
+        return System.currentTimeMillis() - startTime;
     }
 
     public List<Player> getPlayers() {
@@ -118,4 +126,18 @@ public class RoundHandler {
         teams.remove(t);
     }
 
+    public List<Team> getTeams() {
+        return teams;
+    }
+
+    public void makeEnderTeam(Team t) {
+        this.enderTeam = t;
+
+        // buff players
+        for(Player p : t.getPlayers()) {
+            p.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 999999, 1));
+            p.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 99999, 1));
+            p.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 99999, 1));
+        }
+}
 }
