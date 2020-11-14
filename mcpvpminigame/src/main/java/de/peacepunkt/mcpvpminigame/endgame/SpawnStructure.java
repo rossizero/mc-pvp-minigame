@@ -82,6 +82,9 @@ public class SpawnStructure implements Listener {
             }
         }
     }
+    private void thunder() {
+
+    }
     private void changeCountdownTeam(Team t) {
         if(first) {
             current_team = t;
@@ -149,6 +152,8 @@ public class SpawnStructure implements Listener {
             end();
             timer.cancel();
         }
+
+        thunder();
     }
 
     private void end() {
