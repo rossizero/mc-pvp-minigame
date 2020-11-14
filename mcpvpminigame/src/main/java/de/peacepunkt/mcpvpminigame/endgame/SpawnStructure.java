@@ -27,8 +27,6 @@ public class SpawnStructure implements Listener {
     }
     @EventHandler
     public void onEntityCombustEvent(EntityCombustEvent event) {
-        System.out.println(event.getEntity());
-        System.out.println(event.getEntityType());
         if(event.getEntityType().equals(EntityType.DROPPED_ITEM)) {
             Item i = (Item) event.getEntity();
             if(i.getItemStack().getType().equals(Material.DRAGON_EGG)) {
@@ -41,6 +39,7 @@ public class SpawnStructure implements Listener {
         if (event.getBlock().getType().equals(Material.DRAGON_EGG)) {
             if(event.getBlock().equals(target)) {
                 System.out.println("PLACED ON TARGET");
+                //TODO prevent everything else block types
             }
         }
     }
