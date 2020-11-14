@@ -26,7 +26,7 @@ import org.bukkit.potion.PotionEffect;
 
 
 public class Main extends JavaPlugin implements Listener {
-        public static ChatColor serverChatColor = ChatColor.GREEN;
+        public static ChatColor serverChatColor = ChatColor.WHITE;
         public static int nopvp = 15; //secs
         public static int radius = 15;
 

@@ -186,6 +186,7 @@ public class SpawnStructure implements Listener {
             }
         }
     }
+
     private Block createSpawnStructure() {
         World w = Bukkit.getWorld("world");
         if (w != null) {

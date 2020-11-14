@@ -46,16 +46,16 @@ public class DragonKillListener implements Listener {
             Team t = this.plugin.getHandler().getTeamOfPlayer(player);
             if(t == null) {
                 // Some random guy killed the dragon
-                player.sendMessage("Hey, you don't even have a team, what are you doing????");
+                player.sendMessage(plugin.serverChatColor + "Hey, you don't even have a team, what are you doing????");
                 // do nothing
             }else {
                 this.plugin.getHandler().makeEnderTeam(t);
                 String time_formatted = getFormattedTime(this.plugin.getHandler().getRunningTime());
-                Bukkit.broadcastMessage("The dragon was slayn by Team "+t.getDescription()+ChatColor.RESET+" after "+time_formatted+". The killers are:");
+                Bukkit.broadcastMessage(plugin.serverChatColor + "The dragon was slayn by Team "+t.getDescription()+ChatColor.RESET+" after "+time_formatted+". The killers are:");
                 for(Player p : t.getPlayers()) {
                     Bukkit.broadcastMessage(p.getDisplayName());
                 }
-                Bukkit.broadcastMessage("Now bring the egg back to spawn!");
+                Bukkit.broadcastMessage(plugin.serverChatColor + "Now bring the egg back to spawn!");
             }
             
         }
