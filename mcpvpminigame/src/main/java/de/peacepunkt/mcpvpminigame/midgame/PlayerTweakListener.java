@@ -24,7 +24,6 @@ public class PlayerTweakListener implements Listener {
     public void onItemMove(InventoryClickEvent event) {
         ItemStack item = event.getCurrentItem();
         if(item != null && item.getType().equals(Material.DRAGON_EGG)) {
-            Bukkit.broadcastMessage(event.getInventory().getType()+" > "+event.getRawSlot()+" "+event.getSlot());
             if(!event.getInventory().getType().equals(InventoryType.CRAFTING)) {
                 event.setCancelled(true);
             }
