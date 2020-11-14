@@ -36,8 +36,14 @@ public class Round implements Listener {
             }
         };
         //runs synchronously!
-        noPvpCooldown.runTaskTimer(handler.getMain(), 0, 20);
+        noPvpCooldown.runTaskTimer(handler.getMain(), (4*60+50)*20, 20); // Start after 4 min 50 seconds
         //5 mins no pvp
+
+        // change weather to clear/time to 0
+        World w = Bukkit.getWorld("world");
+        w.setTime(0);
+        w.setStorm(false);
+        w.setThundering(false);
     }
 
     private void noPvpCooldown() {
@@ -92,5 +98,9 @@ public class Round implements Listener {
             Bukkit.broadcastMessage(Main.serverChatColor + "canceled");
         }
         tpPlayersIntoWorld("lobby", false, new Vector(0, 0, 0));
+
+        World w = Bukkit.getWorld("world");
+        w.setThundering(false);
+        w.setStorm(false);
     }
 }

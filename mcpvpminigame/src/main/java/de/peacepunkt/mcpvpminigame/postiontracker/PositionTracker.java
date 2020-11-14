@@ -231,7 +231,7 @@ public class PositionTracker implements Listener {
                     }
                 }
     
-            }, 0L, 2*20L); // 60 seconds
+            }, 0L, 60*20L); // 60 seconds
             isRunning = true;
             return true;
         }
