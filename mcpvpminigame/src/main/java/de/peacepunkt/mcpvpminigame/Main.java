@@ -8,7 +8,9 @@ import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.permissions.PermissionAttachment;
@@ -27,7 +29,7 @@ import org.bukkit.potion.PotionEffect;
 
 public class Main extends JavaPlugin implements Listener {
         public static ChatColor serverChatColor = ChatColor.GREEN;
-        public static int nopvp = 15; //secs
+        public static int nopvp = 5*60; //secs
         public static int radius = 15;
 
         World lobby;
@@ -76,13 +78,19 @@ public class Main extends JavaPlugin implements Listener {
                 }
                 boolean isLeader = permissions.containsKey(event.getPlayer().getUniqueId());
                 if (t != null) {
-                        if(isLeader) {
-                                addLeaderPermission(event.getPlayer());
+                    if(!handler.getRound().isDone()) {
+                        if (isLeader) {
+                            addLeaderPermission(event.getPlayer());
                         }
                         t.addPlayer(Bukkit.getOfflinePlayer(event.getPlayer().getUniqueId()), isLeader);
-                        if(event.getPlayer().getWorld().getName().equals("lobby") && handler.getRound().isRunning()) {
-                                handler.tpPlayerIntoGame(event.getPlayer());
+                        if (event.getPlayer().getWorld().getName().equals("lobby") && handler.getRound().isRunning()) {
+                            handler.tpPlayerIntoGame(event.getPlayer());
                         }
+                    } else {
+                        t.addPlayer(Bukkit.getOfflinePlayer(event.getPlayer().getUniqueId()), isLeader);
+                        Location l = new Location(lobby, lobby.getSpawnLocation().getX(), lobby.getSpawnLocation().getY(), lobby.getSpawnLocation().getZ());
+                        event.getPlayer().teleport(l);
+                    }
                 } else {
                         //tp to lobby
                         clearInventory(event.getPlayer());
@@ -160,6 +168,14 @@ public class Main extends JavaPlugin implements Listener {
         }
 
         @EventHandler
+        public void onPlayerDropItemEvent(PlayerDropItemEvent event) {
+                if(event.getItemDrop().getItemStack().getType().equals(Material.DRAGON_EGG)) {
+                    event.getItemDrop().setInvulnerable(true);
+                    event.setCancelled(true);
+                }
+        }
+
+        @EventHandler
         public void onAsyncPlayerChatEvent(AsyncPlayerChatEvent event){
                 //if player has a team, automatically send the message to team members only
                 Team t = handler.getTeamOfPlayer(event.getPlayer());
@@ -174,6 +190,14 @@ public class Main extends JavaPlugin implements Listener {
                 if(event.getPlayer().getWorld().getName().equals("lobby")) {
                         event.setRespawnLocation(new Location(lobby, lobby.getSpawnLocation().getX(), lobby.getSpawnLocation().getY(), lobby.getSpawnLocation().getZ()));
                 }
+        }
+
+        @EventHandler
+        public void  onEntityDamageByEntityEvent(EntityDamageByEntityEvent e) {
+            if (e.getEntity() instanceof Player && e.getDamager() instanceof Player) {
+                if(e.getEntity().getWorld().getName().equals("lobby"))
+                    e.setCancelled(true);
+            }
         }
 
 

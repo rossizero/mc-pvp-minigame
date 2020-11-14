@@ -20,6 +20,8 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.Random;
+
 
 public class SpawnStructure implements Listener {
     Main main;
@@ -35,6 +37,7 @@ public class SpawnStructure implements Listener {
 
     boolean first = true;
     boolean abgebaut = false;
+    Swarm swarm;
 
     public SpawnStructure(Main main) {
         this.main = main;
@@ -80,6 +83,10 @@ public class SpawnStructure implements Listener {
             } else {
                 event.setCancelled(true);
             }
+        } else {
+            if (event.getBlock().getType().equals(Material.DRAGON_EGG)) {
+                event.setCancelled(true);
+            }
         }
     }
     private void changeCountdownTeam(Team t) {
@@ -92,11 +99,11 @@ public class SpawnStructure implements Listener {
             timer.runTaskTimer(main, 0, 20);
             first = false;
             reseted = true;
-            World w = Bukkit.getWorld("world");
-            w.setThundering(true);
-            w.setStorm(true);
-            w.setWeatherDuration(99999999); 
+            target.getWorld().setThundering(true);
+            target.getWorld().setStorm(true);
+            target.getWorld().setWeatherDuration(99999999);
 
+            swarm = new Swarm(target.getLocation().clone().add(0, 20, 0), main, 70);
 
         } else {
             if(current_team.equals(t)) {
@@ -118,6 +125,7 @@ public class SpawnStructure implements Listener {
             }
         }
     }
+
     boolean reseted = false;
     private void update_function() {
         if(!abgebaut) {
@@ -155,13 +163,25 @@ public class SpawnStructure implements Listener {
             end();
             timer.cancel();
         }
-
+        if(!abgebaut) {
+            flash();
+            target.getWorld().spawnParticle(Particle.SQUID_INK, target.getLocation().clone().add(0.5, 1, 0.5), 20);
+            target.getWorld().spawnParticle(Particle.PORTAL, target.getLocation().clone().add(0.5, 1, 0.5), 30);
+            target.getWorld().spawnParticle(Particle.PORTAL, target.getLocation().clone().add(0.5, 0, 0.5), 10);
+            target.getWorld().spawnParticle(Particle.PORTAL, target.getLocation().clone().add(0.5, 1, 0.5), 15);
+            target.getWorld().spawnParticle(Particle.PORTAL, target.getLocation().clone().add(0.5, 0, 0.5), 25);
+            target.getWorld().spawnParticle(Particle.CRIMSON_SPORE, target.getLocation().clone().add(0.5, 0, 0.5), 50);
+        }
     }
-
+    private void flash() {
+        Random r = new Random();
+        if(r.nextInt(15) < 1) {
+            target.getWorld().strikeLightning(target.getLocation());
+        }
+    }
     private void end() {
         main.waldtraud(current_team);
-
-        // remove bossbar
+        main.getHandler().getRound().done();
         bossBar.removeAll();
     }
 
@@ -175,6 +195,7 @@ public class SpawnStructure implements Listener {
                     event.setCancelled(true);
                     event.getClickedBlock().setType(Material.AIR);
                     ItemStack item = new ItemStack(Material.DRAGON_EGG);
+                    target.getWorld().spawnParticle(Particle.FALLING_OBSIDIAN_TEAR, target.getLocation().clone(), 30);
                     Item i = event.getPlayer().getWorld().dropItem(event.getClickedBlock().getLocation(), item);
                     i.setInvulnerable(true);
                     if(event.getClickedBlock().getLocation().equals(target.getLocation())) {

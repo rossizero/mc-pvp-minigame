@@ -18,6 +18,7 @@ public class Round implements Listener {
     private int secondsFromPvpCooldown = 0;
     private boolean ispvp = false;
     private boolean running = false;
+    private boolean done = false;
 
     public Round(RoundHandler handler) {
         this.handler = handler;
@@ -36,7 +37,7 @@ public class Round implements Listener {
             }
         };
         //runs synchronously!
-        noPvpCooldown.runTaskTimer(handler.getMain(), (4*60+50)*20, 20); // Start after 4 min 50 seconds
+        noPvpCooldown.runTaskTimer(handler.getMain(), 0, 20); // Start after 4 min 50 seconds
         //5 mins no pvp
 
         // change weather to clear/time to 0
@@ -102,5 +103,12 @@ public class Round implements Listener {
         World w = Bukkit.getWorld("world");
         w.setThundering(false);
         w.setStorm(false);
+    }
+
+    public void done() {
+        done = true;
+    }
+    public boolean isDone() {
+        return done;
     }
 }
