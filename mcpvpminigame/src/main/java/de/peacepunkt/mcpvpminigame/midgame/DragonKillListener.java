@@ -26,7 +26,6 @@ public class DragonKillListener implements Listener {
         if(event.getEntity().getType().equals(EntityType.ENDER_DRAGON)) {
             if(event.getDamager() instanceof Player) {
                 lastSlayer = (Player) event.getDamager();
-
             }
         }
 

@@ -56,7 +56,7 @@ public class PositionTracker implements Listener {
             if(target == leaver) {
                 Player toMsg = Bukkit.getPlayer(player);
                 if(toMsg != null) {
-                    toMsg.sendMessage(ChatColor.RED + "Dein Kompass zeigt jetzt auf die letzte bekannte Position von "+leaver_player.getDisplayName());
+                    toMsg.sendMessage(ChatColor.RED + "Your compass shows to the last known location of "+leaver_player.getDisplayName());
                 }
             }
         });
@@ -73,14 +73,14 @@ public class PositionTracker implements Listener {
                 Player p = event.getPlayer();
                 Player target = getNextTarget(p);
                 if(target == null) {
-                    p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText("Es gibt aktuell keinen Spieler, auf den gezeigt werden kann. Vielleicht sind die Teams leer?"));
+                    p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText("No players to point at."));
                 }else{
 
                     // Try to set target, only works when the lag time has passed once
                     if(setTargetOf(p, target)) {
-                        p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText("Dein Kompass zeigt jetzt auf "+target.getDisplayName()));
+                        p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText("Your compass points to "+target.getDisplayName()));
                     }else{
-                        p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText("Position von Spieler "+target.getDisplayName()+ChatColor.RESET+" ist noch unbekannt."));
+                        p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText("The position of "+target.getDisplayName()+ChatColor.RESET+" is still unknown."));
                     }
                 }
             }
