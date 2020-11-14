@@ -31,7 +31,7 @@ public class SpawnStructure implements Listener {
     private Team current_team = null;
 
     BossBar bossBar;
-    int final_countdown = 30;
+    int final_countdown = 7 * 60;
 
     boolean first = true;
     boolean abgebaut = false;
@@ -82,9 +82,6 @@ public class SpawnStructure implements Listener {
             }
         }
     }
-    private void thunder() {
-
-    }
     private void changeCountdownTeam(Team t) {
         if(first) {
             current_team = t;
@@ -95,6 +92,12 @@ public class SpawnStructure implements Listener {
             timer.runTaskTimer(main, 0, 20);
             first = false;
             reseted = true;
+            World w = Bukkit.getWorld("world");
+            w.setThundering(true);
+            w.setStorm(true);
+            w.setWeatherDuration(99999999); 
+
+
         } else {
             if(current_team.equals(t)) {
                 reseted = true;
@@ -153,11 +156,13 @@ public class SpawnStructure implements Listener {
             timer.cancel();
         }
 
-        thunder();
     }
 
     private void end() {
         main.waldtraud(current_team);
+
+        // remove bossbar
+        bossBar.removeAll();
     }
 
     @EventHandler
