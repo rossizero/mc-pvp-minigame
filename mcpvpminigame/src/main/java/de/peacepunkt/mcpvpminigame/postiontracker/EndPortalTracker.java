@@ -28,13 +28,17 @@ public class EndPortalTracker implements Listener {
         if(event.getFrom().getEnvironment().equals(Environment.THE_END)){
             Location saved = sources.get(event.getPlayer().getUniqueId());
 
-            // add randomness, so one cannot be trapped inside the portal
-            saved = saved.add(random.nextInt(30)-15, 0, random.nextInt(31)-15);
             if(saved != null) {
-                event.getPlayer().teleport(event.getPlayer().getWorld().getHighestBlockAt(saved).getLocation().add(0.5d, 1, 0.5d));
+                // add randomness, so one cannot be trapped inside the portal
+                saved = saved.add(random.nextInt(30)-15, 0, random.nextInt(31)-15);
+                if(saved != null) {
+                    event.getPlayer().teleport(event.getPlayer().getWorld().getHighestBlockAt(saved).getLocation().clone().add(0.5d, 1, 0.5d));
+                }
             }
+            
         }
     }
+
 
     @EventHandler
     public void onEnterEndWorld(PlayerPortalEvent event) {
@@ -44,6 +48,8 @@ public class EndPortalTracker implements Listener {
         if(from.getEnvironment() == Environment.NORMAL) {
             if(to.getEnvironment() == Environment.THE_END) {
                 sources.put(event.getPlayer().getUniqueId(), event.getPlayer().getLocation());
+
+                Bukkit.broadcastMessage(event.getPlayer().getDisplayName()+" entered the end!");
             }
         } 
             
