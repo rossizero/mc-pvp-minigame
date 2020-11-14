@@ -131,13 +131,33 @@ public class RoundHandler {
     }
 
     public void makeEnderTeam(Team t) {
+        debuffEnderTeam();
         this.enderTeam = t;
-
         // buff players
-        for(Player p : t.getPlayers()) {
-            p.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 999999, 1));
-            p.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 99999, 1));
-            p.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 99999, 1));
+        if(t != null) {
+            for (Player p : t.getPlayers()) {
+                p.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 999999, 1));
+                p.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 99999, 1));
+                p.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 99999, 1));
+            }
         }
-}
+    }
+
+    public void debuffEnderTeam() {
+        if(enderTeam != null) {
+            for (Player p : enderTeam.getPlayers()) {
+                for (PotionEffect effect : p.getActivePotionEffects()) {
+                    if (effect.getType().equals(PotionEffectType.JUMP)) {
+                        p.removePotionEffect(PotionEffectType.JUMP);
+                    }
+                    if (effect.getType().equals(PotionEffectType.NIGHT_VISION)) {
+                        p.removePotionEffect(PotionEffectType.NIGHT_VISION);
+                    }
+                    if (effect.getType().equals(PotionEffectType.ABSORPTION)) {
+                        p.removePotionEffect(PotionEffectType.ABSORPTION);
+                    }
+                }
+            }
+        }
+    }
 }

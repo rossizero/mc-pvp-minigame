@@ -46,14 +46,22 @@ public class Team {
             joinMsg(player.getPlayer(), false);
             changeNickName(player.getPlayer());
         }
-        boolean found = false;
-        for(OfflinePlayer p: mates) {
-            if(p.getUniqueId().equals(player.getUniqueId())) {
-                found = true;
+        if(leader) {
+            this.leader = player;
+        } else {
+            boolean found = false;
+            OfflinePlayer remove = null;
+            for(OfflinePlayer p: mates) {
+                if(p.getUniqueId().equals(player.getUniqueId())) {
+                    found = true;
+                    remove = p;
+                }
             }
-        }
-        if(!found)
+            if(found) {
+                mates.remove(remove);
+            }
             mates.add(player);
+        }
     }
 
     public List<Player> getPlayers() {
@@ -72,7 +80,7 @@ public class Team {
     public static ChatColor colorById(int id) {
         switch (id) {
             default:
-                return ChatColor.BLUE;
+                return ChatColor.AQUA;
             case 1:
                 return ChatColor.GREEN;
             case 2:
@@ -90,7 +98,8 @@ public class Team {
             case 8:
                 return ChatColor.DARK_RED;
             case 9:
-                return ChatColor.AQUA;
+                return ChatColor.BLUE;
+
         }
     }
 
@@ -136,10 +145,10 @@ public class Team {
     public void sendMessage(Player player, String message) {
         for(OfflinePlayer p : mates) {
             if(p.getPlayer() != null)
-                p.getPlayer().sendMessage(ChatColor.LIGHT_PURPLE+"[TEAM] " + ChatColor.RESET +"<"+player.getDisplayName() +"> " + message);
+                p.getPlayer().sendMessage(Main.serverChatColor+"[TEAM] " + ChatColor.RESET +"<"+player.getDisplayName() +"> " + ChatColor.GRAY + message);
         }
         if(leader.getPlayer() != null) {
-            leader.getPlayer().sendMessage(ChatColor.LIGHT_PURPLE+"[TEAM] " + ChatColor.RESET +"<"+player.getDisplayName() +"> " + message);
+            leader.getPlayer().sendMessage(Main.serverChatColor+"[TEAM] " + ChatColor.RESET +"<"+player.getDisplayName() +"> " + ChatColor.GRAY + message);
         }
     }
 }

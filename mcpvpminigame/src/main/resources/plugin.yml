@@ -56,3 +56,7 @@
 
    a:
      description: write in global chat
+
+   newround:
+     permission: op
+     permission-message: Nope..

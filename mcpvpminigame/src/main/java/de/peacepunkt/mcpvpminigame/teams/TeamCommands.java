@@ -117,8 +117,11 @@ public class TeamCommands {
                     StringBuilder msg = new StringBuilder();
                     for(String str : strings) {
                         msg.append(str).append(" ");
+                        for (Team t: main.getHandler().getTeams()) {
+                           System.out.println(t.getPlayers());
+                        }
                     }
-                    Bukkit.broadcastMessage(ChatColor.LIGHT_PURPLE+"[GLOBAL] " + ChatColor.RESET +"<"+sender.getDisplayName() +"> " + msg.toString());
+                    Bukkit.broadcastMessage(main.serverChatColor + "[GLOBAL] " + ChatColor.RESET +"<"+sender.getDisplayName() +"> " + msg.toString());
                 }
                 return true;
             }

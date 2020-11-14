@@ -1,5 +1,6 @@
 package de.peacepunkt.mcpvpminigame;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -8,6 +9,7 @@ import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
@@ -28,8 +30,8 @@ import org.bukkit.potion.PotionEffect;
 
 
 public class Main extends JavaPlugin implements Listener {
-        public static ChatColor serverChatColor = ChatColor.GREEN;
         public static int nopvp = 5*60; //secs
+        public static ChatColor serverChatColor = ChatColor.WHITE;
         public static int radius = 15;
 
         World lobby;
@@ -184,7 +186,12 @@ public class Main extends JavaPlugin implements Listener {
                         event.setCancelled(true);
                 }
         }
-
+        @EventHandler
+        public void onBlockbreak(BlockBreakEvent event) {
+            if(event.getBlock().getWorld().getName().equals("lobby") && !event.getPlayer().isOp()) {
+                event.setCancelled(true);
+            }
+        }
         @EventHandler
         public void onPlayerRespawnEvent(PlayerRespawnEvent event) {
                 if(event.getPlayer().getWorld().getName().equals("lobby")) {
@@ -200,5 +207,37 @@ public class Main extends JavaPlugin implements Listener {
             }
         }
 
+    /*public void newround() {
+            for(Player p: Bukkit.getOnlinePlayers()) {
+                Location l = new Location(lobby, lobby.getSpawnLocation().getX(), lobby.getSpawnLocation().getY(), lobby.getSpawnLocation().getZ());
+                p.teleport(l);
+            }
 
+            Bukkit.unloadWorld("world", false);
+            Bukkit.unloadWorld("world_nether", false);
+            Bukkit.unloadWorld("world_the_end", false);
+
+            File dir = Bukkit.getWorldContainer();
+            File subDirectory = new File(dir, "world");
+            deleteFolder(subDirectory);
+            subDirectory = new File(dir, "world_nether");
+            deleteFolder(subDirectory);
+            subDirectory = new File(dir, "world_the_end");
+            System.out.println(subDirectory.getAbsoluteFile());
+            deleteFolder(subDirectory);
+            Bukkit.getServer().reload();
+    }*/
+    private void deleteFolder(File folder) {
+        File[] files = folder.listFiles();
+        if(files!=null) { //some JVMs return null for empty dirs
+            for(File f: files) {
+                if(f.isDirectory()) {
+                    deleteFolder(f);
+                } else {
+                    f.delete();
+                }
+            }
+        }
+        folder.delete();
+    }
 }

@@ -61,6 +61,9 @@ public class SpawnStructure implements Listener {
     }
     @EventHandler
     public void onBlockPlacedEvent(BlockPlaceEvent event) {
+        if(event.getBlock().getWorld().getName().equals("lobby") && !event.getPlayer().isOp()) {
+            event.setCancelled(true);
+        }
         if (event.getBlock().getLocation().equals(target.getLocation())) {
             System.out.println(event.getBlock());
             if (event.getBlock().getType().equals(Material.DRAGON_EGG)) {
@@ -90,6 +93,7 @@ public class SpawnStructure implements Listener {
         }
     }
     private void changeCountdownTeam(Team t) {
+        main.getHandler().makeEnderTeam(t);
         if(first) {
             current_team = t;
             bossBar = Bukkit.createBossBar( "", BarColor.PINK, BarStyle.SOLID);
@@ -135,6 +139,7 @@ public class SpawnStructure implements Listener {
                     counter = 0;
                     old_team = null;
                     reseted = true;
+                    main.getHandler().makeEnderTeam(null);
                 }
             } else {
                 counter++;
@@ -145,6 +150,7 @@ public class SpawnStructure implements Listener {
                 counter = 0;
                 old_team = null;
                 reseted = true;
+                main.getHandler().makeEnderTeam(null);
             }
         }
         int percentage = (int) (((float)counter / (float)final_countdown) * 100);
@@ -208,6 +214,7 @@ public class SpawnStructure implements Listener {
             }
         }
     }
+
     private Block createSpawnStructure() {
         World w = Bukkit.getWorld("world");
         if (w != null) {

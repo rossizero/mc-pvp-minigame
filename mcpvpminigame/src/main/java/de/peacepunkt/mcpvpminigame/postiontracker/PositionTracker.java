@@ -56,7 +56,7 @@ public class PositionTracker implements Listener {
             if(target == leaver) {
                 Player toMsg = Bukkit.getPlayer(player);
                 if(toMsg != null) {
-                    toMsg.sendMessage(ChatColor.RED + "Your compass shows to the last known location of "+leaver_player.getDisplayName());
+                    toMsg.sendMessage(main.serverChatColor + "Your compass shows to the last known location of "+leaver_player.getDisplayName());
                 }
             }
         });

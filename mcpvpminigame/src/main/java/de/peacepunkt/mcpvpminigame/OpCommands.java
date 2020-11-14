@@ -8,6 +8,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.permissions.PermissionAttachment;
 
 class OpCommands {
@@ -132,6 +133,15 @@ class OpCommands {
                     }
                 }
                 return false;
+            }
+        });
+
+        main.getCommand("newround").setExecutor(new CommandExecutor() {
+            @Override
+            public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
+                if(commandSender instanceof Player)
+                    commandSender.sendMessage("not yet implemented");
+                return true;
             }
         });
     }

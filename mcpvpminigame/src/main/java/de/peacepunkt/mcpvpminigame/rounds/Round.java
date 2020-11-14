@@ -29,7 +29,7 @@ public class Round implements Listener {
         startSound();
         running = true;
         Bukkit.broadcastMessage(Main.serverChatColor + "pvp disabled for 5 mins from now");
-        Bukkit.broadcastMessage(ChatColor.GRAY + "" + ChatColor.ITALIC + "Zitat Mo: 'Wohin zeigt ein Kompass eigentlich standardmäßig?'");
+        Bukkit.broadcastMessage(Main.serverChatColor + "" + ChatColor.ITALIC + "Zitat Mo: 'Wohin zeigt ein Kompass eigentlich standardmäßig?'");
         noPvpCooldown = new BukkitRunnable() {
             @Override
             public void run() {
@@ -45,6 +45,7 @@ public class Round implements Listener {
         w.setTime(0);
         w.setStorm(false);
         w.setThundering(false);
+        w.setWeatherDuration(0);
     }
 
     private void noPvpCooldown() {
