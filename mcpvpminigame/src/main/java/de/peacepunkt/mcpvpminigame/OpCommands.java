@@ -85,8 +85,9 @@ class OpCommands {
                             if (t == null) {
                                 Team neww = main.getHandler().createTeam(name, short_name, leader);
                                 if(neww != null) {
-                                    PermissionAttachment a = leader.addAttachment(main, "leader", true);
-                                    main.permissions.put(leader.getUniqueId(), a);
+                                    main.addLeaderPermission(leader);
+                                    //PermissionAttachment a = leader.addAttachment(main, "leader", true);
+                                    //main.permissions.put(leader.getUniqueId(), a);
                                     if(main.getHandler().getRound().isRunning()) {
                                         main.getHandler().tpPlayerIntoGame(leader);
                                     }

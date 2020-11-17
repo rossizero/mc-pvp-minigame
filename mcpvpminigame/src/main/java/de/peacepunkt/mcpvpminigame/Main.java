@@ -132,7 +132,7 @@ public class Main extends JavaPlugin implements Listener {
                 return handler;
         }
 
-        private void addLeaderPermission(Player p) {
+        public void addLeaderPermission(Player p) {
                 UUID id = p.getUniqueId();
                 PermissionAttachment a = p.addAttachment(this, "leader", true);
                 Team t = handler.getTeamOfLeader(p);
@@ -140,6 +140,7 @@ public class Main extends JavaPlugin implements Listener {
                         p.sendMessage(ChatColor.GREEN + "You're the team leader of team " + t.getDescription());
                         permissions.put(id, a);
                 }
+                p.updateCommands();
         }
 
         //loads or creates the lobby world
