@@ -10,6 +10,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -69,19 +70,22 @@ public class PositionTracker implements Listener {
         // check for left right click with a compass
         if(action.equals(Action.RIGHT_CLICK_AIR) || action.equals(Action.RIGHT_CLICK_BLOCK)) {
             if(event.getItem() != null && event.getItem().getType().equals(Material.COMPASS)) {
-                event.setCancelled(true);
                 Player p = event.getPlayer();
                 Player target = getNextTarget(p);
-                if(target == null) {
-                    p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText("No players to point at."));
-                }else{
-
-                    // Try to set target, only works when the lag time has passed once
-                    if(setTargetOf(p, target)) {
-                        p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText("Your compass points to "+target.getDisplayName()));
+                if(p.getWorld().equals(Bukkit.getWorld("world"))){
+                    if(target == null) {
+                        p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText("No players to point at."));
                     }else{
-                        p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText("The position of "+target.getDisplayName()+ChatColor.RESET+" is still unknown."));
+
+                        // Try to set target, only works when the lag time has passed once
+                        if(setTargetOf(p, target)) {
+                            p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText("Your compass points to "+target.getDisplayName()));
+                        }else{
+                            p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText("The position of "+target.getDisplayName()+ChatColor.RESET+" is still unknown."));
+                        }
                     }
+                } else {
+                    p.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(ChatColor.RED+"The compass only works in the overworld"));
                 }
             }
         }
@@ -204,19 +208,24 @@ public class PositionTracker implements Listener {
         if(!isRunning) {
             // set start time
             timerIndex = 0;
+            World world = Bukkit.getWorld("world");
             
             taskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(this.main, new Runnable() {
             
                 @Override
                 public void run() {
-                    List<Player> players = Bukkit.getWorld("world").getPlayers();
+                    List<Player> players = world.getPlayers();
+                    
 
                     // now create list
                     HashMap<UUID, Location> newLocations = new HashMap<UUID, Location>();
                     for(Player player : players) {
-                        newLocations.put(player.getUniqueId(), player.getLocation());
-
-
+                        if(!player.getWorld().equals(world)) {  // Player seems to be in nether or end. copy last location
+                            Location lastloc = playerlocationsByTime.get((timerIndex-1)%positionLag).get(player.getUniqueId());
+                            newLocations.put(player.getUniqueId(), lastloc);
+                        } else {
+                            newLocations.put(player.getUniqueId(), player.getLocation());
+                        }
                     }
 
                     // Save at point in time: timerIndex
