@@ -56,7 +56,8 @@
 
    a:
      description: write in global chat
-
+   trade:
+     description: open trade gui
    newround:
      permission: op
      permission-message: Nope..

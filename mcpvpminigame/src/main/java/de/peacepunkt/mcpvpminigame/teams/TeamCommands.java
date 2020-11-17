@@ -1,6 +1,7 @@
 package de.peacepunkt.mcpvpminigame.teams;
 
 import de.peacepunkt.mcpvpminigame.Main;
+import de.peacepunkt.mcpvpminigame.gewinnable.TradeGui;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -122,6 +123,19 @@ public class TeamCommands {
                         }
                     }
                     Bukkit.broadcastMessage(main.serverChatColor + "[GLOBAL] " + ChatColor.RESET +"<"+sender.getDisplayName() +"> " + msg.toString());
+                }
+                return true;
+            }
+        });
+
+        main.getCommand("trade").setExecutor(new CommandExecutor() {
+            @Override
+            public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
+                if(commandSender instanceof Player) {
+                    Player player = (Player) commandSender;
+                    TradeGui gui = new TradeGui(main, player);
+                    gui.openInventory();
+                    return true;
                 }
                 return true;
             }

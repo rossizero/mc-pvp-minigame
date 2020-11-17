@@ -5,16 +5,17 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import de.peacepunkt.mcpvpminigame.gewinnable.Level;
+import de.peacepunkt.mcpvpminigame.gewinnable.LevelHandler;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
-import org.bukkit.event.player.PlayerDropItemEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerRespawnEvent;
+import org.bukkit.event.inventory.InventoryOpenEvent;
+import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.event.player.*;
 import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -36,6 +37,7 @@ public class Main extends JavaPlugin implements Listener {
 
         World lobby;
         RoundHandler handler;
+        LevelHandler levelHandler;
         Map<UUID, PermissionAttachment> permissions;
         SpawnStructure spawnStructure;
 
@@ -51,6 +53,7 @@ public class Main extends JavaPlugin implements Listener {
 
                 //initialising our fancy ass RoundHandler
                 handler = new RoundHandler(this);
+                levelHandler = new LevelHandler(this);
 
                 new TeamCommands(this);
                 new OpCommands(this);
@@ -73,6 +76,7 @@ public class Main extends JavaPlugin implements Listener {
 
         @EventHandler
         public void onPlayerJoin(PlayerJoinEvent event) {
+                levelHandler.addPlayer(event.getPlayer());
                 //check if player had a team and if he was the leader of that team
                 Team t = handler.getTeamOfPlayer(event.getPlayer());
                 for (PotionEffect effect : event.getPlayer().getActivePotionEffects()) {
@@ -239,5 +243,22 @@ public class Main extends JavaPlugin implements Listener {
             }
         }
         folder.delete();
+    }
+
+    @EventHandler
+    public void onPlayerEntersPortalEvent(PlayerPortalEvent event) {
+        if(event.getTo().getWorld().getEnvironment().equals(World.Environment.NETHER)) {
+            levelHandler.addLevel(event.getPlayer(), Level.netherKey);
+        }
+    }
+
+    /**
+     * check if a player already has a certain level
+     * @param player
+     * @param key
+     * @return whether the player has that level or false if player does not yet exist
+     */
+    public boolean hasLevel(Player player, String key) {
+        return levelHandler.hasLevel(player, key);
     }
 }
